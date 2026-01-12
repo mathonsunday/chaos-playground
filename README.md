@@ -1,6 +1,6 @@
 # Chaos Playground
 
-A boundary-pushing visual effects playground — not meant to be "usable" in a conventional sense, but rather a collection of weird, surprising, and hypnotic interactive experiences.
+A boundary-pushing visual effects playground — not meant to be "usable" in a conventional sense, but rather a collection of weird, surprising, and hypnotic interactive experiences. Also serves as an **experimentation and learning resource** for web-based visual effects technologies.
 
 ## ✨ Concept
 
@@ -52,16 +52,117 @@ src/
 
 Data persists in `localStorage` under the key `chaos-playground-data`.
 
+---
+
+## 🔬 Technology Exploration & Learnings
+
+This project served as an exploration of different web technologies for visual effects. Here's what we learned:
+
+### CSS-Only Effects (What We Used)
+
+**Best for:**
+- "Intentionally janky" aesthetic — CSS attempts at realism have an inherent uncanniness
+- Simple shapes, geometric effects, silhouettes
+- Responsive layouts and transforms
+- Gradients, shadows, blur filters
+- CSS animations for rhythmic/looping motion
+
+**Techniques demonstrated:**
+- Complex gradients for depth/atmosphere
+- CSS transforms for parallax layers
+- `filter: blur()` for depth-of-field simulation
+- CSS variables for dynamic theming
+- Keyframe animations for organic movement
+- DOM element spawning/manipulation for particle-like effects
+
+**Limitations:**
+- Hard to achieve photorealism
+- Performance degrades with many animated elements
+- Limited control over precise timing/physics
+- Blur and shadows are expensive at scale
+
+### Canvas 2D (Explored but not kept)
+
+**Best for:**
+- Smooth particle systems (marine snow, dust, etc.)
+- Soft glows and radial gradients
+- Per-frame animation control
+- Many small elements with good performance
+
+**What we tried:**
+- Atmospheric underwater scene with floating particles
+- Radial gradient "bioluminescence" effects
+- Vignette and depth effects
+
+**Learnings:**
+- Great for atmosphere and ambient effects
+- Requires manual render loop management
+- Works well alongside DOM/CSS elements
+- Better performance than CSS for many particles
+
+### SVG (Explored but not kept)
+
+**Best for:**
+- Detailed, scalable vector illustrations
+- Anatomically accurate creatures/characters
+- Crisp edges at any size
+- Complex shapes with gradients and filters
+
+**What we tried:**
+- Detailed deep-sea creatures (anglerfish, viperfish, jellyfish, dragonfish, lanternfish)
+- SVG filters for glow effects
+- Inline SVG with dynamic props
+
+**Learnings:**
+- Can achieve high detail (teeth, photophores, anatomical features)
+- Scales perfectly — detail visible at any size
+- SVG filters enable nice glow/blur effects
+- Works well as React components with animated props
+- For the "detailed creature" use case, works better than CSS shapes
+
+### Technologies Not Explored (Future Possibilities)
+
+**WebGL / Three.js:**
+- True 3D rendering, realistic lighting
+- Shader-based effects (water caustics, volumetric fog)
+- Would be needed for: realistic underwater scenes, complex particle physics, 3D creatures
+
+**GLSL Shaders:**
+- Custom GPU-accelerated effects
+- Would be needed for: procedural textures, distortion effects, complex lighting
+
+**Lottie/After Effects:**
+- Pre-animated vector animations
+- Would be needed for: complex character animations, smooth morphing
+
+### Aesthetic Categories Explored
+
+| Aesthetic | Technology Match | Notes |
+|-----------|-----------------|-------|
+| **Janky Code Art** | CSS | Embraces limitations as features |
+| **Bioluminescent/Abyssal** | Canvas + SVG | Needs smooth glow + detail |
+| **ASCII/Terminal** | CSS/DOM | Green-on-black, scanlines — pure CSS works |
+| **Dreamcore/Weirdcore** | CSS + images | Surreal compositions possible with transforms |
+| **Glitch** | CSS + Canvas | RGB split, scanlines achievable in CSS |
+
+### Key Insight
+
+**Match the technology to the aesthetic goal:**
+- If you *want* things to look slightly off → CSS is perfect
+- If you *want* smooth, atmospheric effects → Canvas 2D
+- If you *want* detailed illustrations → SVG
+- If you *want* photorealism → WebGL/Three.js
+
+The "janky code art" aesthetic that works in this project is specifically enabled by CSS limitations. Trying to achieve polished, realistic effects with CSS will always fall short — but that shortfall can be a feature if framed correctly.
+
+---
+
 ## 🛠 Tech Stack
 
 - **React 18** + **TypeScript** — Component architecture
 - **Vite 5** — Fast development and hot reloading
-- **CSS** — All visual effects are pure CSS (no canvas/WebGL), embracing the "janky code art" aesthetic
+- **CSS** — Primary visual effects (embracing the "janky code art" aesthetic)
 - **localStorage** — Personalization persistence
-
-### Why CSS-only?
-
-The "janky" aesthetic is a feature, not a bug. CSS attempts at realism (translucent jellyfish, shadowy figures, organic movement) inherently have a code-generated uncanniness that serves the project's artistic goals.
 
 ## 🚀 Getting Started
 
