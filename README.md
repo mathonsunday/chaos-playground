@@ -96,7 +96,7 @@ This project served as an exploration of different web technologies for visual e
 
 **Theoretical strengths:** smooth particles, soft glows, good performance for many elements
 
-### SVG (Explored, didn't land)
+### SVG (Explored, execution didn't land)
 
 **What we tried:**
 - Detailed deep-sea creatures (anglerfish, viperfish, jellyfish, dragonfish, lanternfish)
@@ -104,13 +104,14 @@ This project served as an exploration of different web technologies for visual e
 - SVG filters for glow effects
 
 **Why it wasn't kept:**
-- Even with detail, the overall vibe felt off
-- Creatures were either too small to see detail, or too large and awkward
-- The composition/animation didn't come together cohesively
-- "Detailed" doesn't automatically mean "good" — the aesthetic still needs to work
-- The bioluminescent/abyssal theme in general just didn't match the project's goals
+- The execution was poor — creatures were either too small to see detail, or too large and awkward
+- Composition and animation didn't come together cohesively
+- The bioluminescent/abyssal theme is still appealing and could work with better execution
+- This is a failed attempt, not a verdict on the technology or theme
 
 **Theoretical strengths:** scalable detail, crisp at any size, works as React components
+
+**Open question:** Could a well-executed bioluminescent/abyssal room work? Probably yes — this attempt just wasn't it.
 
 ### Technologies Not Explored (Future Possibilities)
 
@@ -141,14 +142,11 @@ This project served as an exploration of different web technologies for visual e
 
 **Technology capability ≠ good output.**
 
-Canvas 2D and SVG are technically capable tools, but capability alone doesn't guarantee results that match your vision. We tried both and the output simply didn't land — not because the technology failed, but because:
-- The aesthetic direction (bioluminescent/abyssal) didn't fit this project
-- Technical capability doesn't replace artistic coherence
-- "More realistic" or "more detailed" isn't always better
+Canvas 2D and SVG are technically capable tools, but capability alone doesn't guarantee good results. We tried both and the output didn't land — not because the technology failed or the theme was wrong, but because the execution was poor.
 
-**What actually worked:** CSS with its inherent limitations. The "janky code art" aesthetic succeeds *because* of CSS constraints, not despite them. The uncanny valley effect of CSS-rendered creatures and shapes serves the creepy-cute vibe in ways that more capable technologies didn't.
+**What actually worked:** CSS with its inherent limitations. The "janky code art" aesthetic succeeds *because* of CSS constraints, not despite them. The uncanny valley effect of CSS-rendered creatures and shapes serves the creepy-cute vibe.
 
-**Lesson:** Start with the feeling you want, then find the technology whose limitations serve that feeling — rather than picking the most capable technology and hoping it produces good results.
+**What remains unexplored:** A well-executed bioluminescent/abyssal room using Canvas/SVG could still work. The failed attempts here reflect execution quality, not a fundamental mismatch between theme and project.
 
 ---
 
