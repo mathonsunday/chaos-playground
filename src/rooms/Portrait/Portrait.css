@@ -1,17 +1,17 @@
 .portrait-room {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(180deg, #050508 0%, #0a0a0c 50%, #08080a 100%);
+  background: #080808;
   position: relative;
   overflow: hidden;
   transition: background 1s ease;
 }
 
 .portrait-room.late-night {
-  background: linear-gradient(180deg, #020204 0%, #050506 50%, #030304 100%);
+  background: #050505;
 }
 
-/* Fog layers */
+/* Fog layers - very subtle, dark only */
 .fog-layer {
   position: absolute;
   inset: 0;
@@ -19,12 +19,12 @@
 }
 
 .fog-1 {
-  background: radial-gradient(ellipse at 50% 100%, rgba(10, 10, 15, 0.6) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.5) 0%, transparent 70%);
 }
 
 .fog-2 {
-  background: radial-gradient(ellipse at 30% 80%, rgba(8, 8, 12, 0.4) 0%, transparent 40%),
-              radial-gradient(ellipse at 70% 70%, rgba(8, 8, 12, 0.4) 0%, transparent 40%);
+  background: radial-gradient(ellipse at 30% 80%, rgba(0, 0, 0, 0.3) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 70%, rgba(0, 0, 0, 0.3) 0%, transparent 50%);
   animation: fog-drift 20s ease-in-out infinite;
 }
 
