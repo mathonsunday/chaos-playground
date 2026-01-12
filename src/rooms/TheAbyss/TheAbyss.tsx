@@ -87,7 +87,7 @@ export default function TheAbyss() {
       else if (side === 'top') { startX = Math.random() * window.innerWidth; startY = 0; }
       else { startX = Math.random() * window.innerWidth; startY = window.innerHeight; }
 
-      const segments = Array.from({ length: 12 }, (_, j) => ({ x: startX, y: startY }));
+      const segments = Array.from({ length: 12 }, () => ({ x: startX, y: startY }));
       
       return {
         startX,
@@ -198,7 +198,6 @@ export default function TheAbyss() {
       
       for (let i = 0; i < tendril.segments.length; i++) {
         const seg = tendril.segments[i];
-        const thickness = tendril.thickness * (1 - i / tendril.segments.length);
         ctx.lineTo(seg.x, seg.y);
       }
       

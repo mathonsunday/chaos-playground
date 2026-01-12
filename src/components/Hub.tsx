@@ -148,7 +148,7 @@ export default function Hub({ onSelectRoom }: HubProps) {
                 ...getCardStyle(index),
                 '--card-color': room.color,
                 '--card-glow': room.glow,
-              } as React.CSSProperties}
+              } as unknown as React.CSSProperties}
             >
               <div className="card-inner">
                 <div className="card-preview">

@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 import { usePersonalization, roomDisplayNames } from '../hooks/usePersonalization';
 
 type PersonalizationContextType = ReturnType<typeof usePersonalization>;

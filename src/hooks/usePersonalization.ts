@@ -63,7 +63,6 @@ export function usePersonalization() {
   useEffect(() => {
     const interval = setInterval(() => {
       setData(prev => {
-        const sessionTime = Math.floor((Date.now() - sessionStart) / 1000);
         const updated = {
           ...prev,
           totalTimeSpent: prev.totalTimeSpent + 1,

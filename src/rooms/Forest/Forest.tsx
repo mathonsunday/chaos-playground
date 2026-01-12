@@ -53,7 +53,7 @@ interface Owl {
 type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 
 export default function Forest() {
-  const { data, getTimeOfDay } = usePersonalizationContext();
+  const { data } = usePersonalizationContext();
   const visits = data.roomVisits['forest'] || 0;
   
   // Debug overrides
