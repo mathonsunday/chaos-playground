@@ -503,6 +503,7 @@
 
 /* ========== Tail ========== */
 .tail {
+  display: none; /* Hidden - was creating weird visual artifact */
   position: absolute;
   bottom: 25px;
   left: 50%;

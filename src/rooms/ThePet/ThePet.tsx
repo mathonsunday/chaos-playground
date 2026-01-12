@@ -134,6 +134,25 @@ export default function ThePet() {
           {statusMessage}
           <span className="visit-count">(visit {petVisits})</span>
         </div>
+        
+        {/* Debug Panel */}
+        <div className="debug-panel">
+          <div className="debug-title">Debug Controls</div>
+          <div className="debug-row">
+            <span>Visits:</span>
+            {[1, 2, 3, 4, 5].map(v => (
+              <button 
+                key={v}
+                className={debugVisits === v ? 'active' : ''} 
+                onClick={() => setDebugVisits(debugVisits === v ? null : v)}
+              >{v === 5 ? '5+' : v}</button>
+            ))}
+            <button 
+              className={debugVisits === null ? 'active' : ''} 
+              onClick={() => setDebugVisits(null)}
+            >REAL</button>
+          </div>
+        </div>
         <button onClick={handleReset} className="debug-reset">Reset Data</button>
       </div>
     );
@@ -212,6 +231,25 @@ export default function ThePet() {
         <div className="pet-label">
           {statusMessage}
           <span className="visit-count">(visit {petVisits})</span>
+        </div>
+        
+        {/* Debug Panel */}
+        <div className="debug-panel">
+          <div className="debug-title">Debug Controls</div>
+          <div className="debug-row">
+            <span>Visits:</span>
+            {[1, 2, 3, 4, 5].map(v => (
+              <button 
+                key={v}
+                className={debugVisits === v ? 'active' : ''} 
+                onClick={() => setDebugVisits(debugVisits === v ? null : v)}
+              >{v === 5 ? '5+' : v}</button>
+            ))}
+            <button 
+              className={debugVisits === null ? 'active' : ''} 
+              onClick={() => setDebugVisits(null)}
+            >REAL</button>
+          </div>
         </div>
         <button onClick={handleReset} className="debug-reset">Reset Data</button>
       </div>
@@ -293,6 +331,25 @@ export default function ThePet() {
         <div className="pet-label">
           {statusMessage}
           <span className="visit-count">(visit {petVisits})</span>
+        </div>
+        
+        {/* Debug Panel */}
+        <div className="debug-panel">
+          <div className="debug-title">Debug Controls</div>
+          <div className="debug-row">
+            <span>Visits:</span>
+            {[1, 2, 3, 4, 5].map(v => (
+              <button 
+                key={v}
+                className={debugVisits === v ? 'active' : ''} 
+                onClick={() => setDebugVisits(debugVisits === v ? null : v)}
+              >{v === 5 ? '5+' : v}</button>
+            ))}
+            <button 
+              className={debugVisits === null ? 'active' : ''} 
+              onClick={() => setDebugVisits(null)}
+            >REAL</button>
+          </div>
         </div>
         <button onClick={handleReset} className="debug-reset">Reset Data</button>
       </div>
@@ -394,6 +451,25 @@ export default function ThePet() {
         <div className="pet-label friend-label">
           {statusMessage}
           <span className="visit-count">(visit {petVisits})</span>
+        </div>
+        
+        {/* Debug Panel */}
+        <div className="debug-panel">
+          <div className="debug-title">Debug Controls</div>
+          <div className="debug-row">
+            <span>Visits:</span>
+            {[1, 2, 3, 4, 5].map(v => (
+              <button 
+                key={v}
+                className={debugVisits === v ? 'active' : ''} 
+                onClick={() => setDebugVisits(debugVisits === v ? null : v)}
+              >{v === 5 ? '5+' : v}</button>
+            ))}
+            <button 
+              className={debugVisits === null ? 'active' : ''} 
+              onClick={() => setDebugVisits(null)}
+            >REAL</button>
+          </div>
         </div>
         <button onClick={handleReset} className="debug-reset">Reset Data</button>
       </div>

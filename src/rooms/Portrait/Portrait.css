@@ -1,39 +1,46 @@
+/* ROOM - Dark with cool atmospheric fog */
 .portrait-room {
   width: 100vw;
   height: 100vh;
-  background: #080808;
+  background: #000;
   position: relative;
   overflow: hidden;
-  transition: background 1s ease;
 }
 
 .portrait-room.late-night {
-  background: #050505;
+  background: #000;
 }
 
-/* Fog layers - very subtle, dark only */
+/* Cool blue-grey fog - atmospheric and moody */
 .fog-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 1;
 }
 
 .fog-1 {
-  background: radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.5) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 100%, rgba(45, 50, 60, 0.6) 0%, transparent 55%);
+  animation: fog-pulse 10s ease-in-out infinite;
 }
 
 .fog-2 {
-  background: radial-gradient(ellipse at 30% 80%, rgba(0, 0, 0, 0.3) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 70%, rgba(0, 0, 0, 0.3) 0%, transparent 50%);
+  background: radial-gradient(ellipse at 25% 95%, rgba(40, 45, 55, 0.4) 0%, transparent 45%),
+              radial-gradient(ellipse at 75% 90%, rgba(40, 45, 55, 0.4) 0%, transparent 45%);
   animation: fog-drift 20s ease-in-out infinite;
 }
 
-@keyframes fog-drift {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(30px); }
+@keyframes fog-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
 }
 
-/* The Figure */
+@keyframes fog-drift {
+  0%, 100% { transform: translateX(0); opacity: 0.4; }
+  50% { transform: translateX(25px); opacity: 0.7; }
+}
+
+/* THE FIGURE - All dark solid colors */
 .the-figure {
   position: absolute;
   left: 50%;
@@ -42,19 +49,22 @@
   width: 300px;
   height: 500px;
   transition: opacity 0.05s, transform 0.5s ease;
+  z-index: 10;
 }
 
+/* Subtle dark aura behind figure */
 .figure-shadow {
   position: absolute;
-  top: -50px;
-  left: -100px;
-  width: 500px;
-  height: 600px;
-  background: radial-gradient(ellipse at 50% 30%, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
+  top: -30px;
+  left: -80px;
+  width: 460px;
+  height: 580px;
+  background: radial-gradient(ellipse at 50% 40%, rgba(0, 0, 0, 0.8) 0%, transparent 55%);
   filter: blur(30px);
+  pointer-events: none;
 }
 
-/* Body - tall dark mass */
+/* Body - very dark silhouette */
 .figure-body {
   position: absolute;
   bottom: 0;
@@ -62,12 +72,7 @@
   transform: translateX(-50%);
   width: 150px;
   height: 350px;
-  background: linear-gradient(180deg, 
-    #1a1a1a 0%, 
-    #0d0d0d 30%,
-    #080808 70%,
-    transparent 100%
-  );
+  background: linear-gradient(180deg, #151515 0%, #0a0a0a 50%, #050505 100%);
   clip-path: polygon(
     30% 0%, 70% 0%,
     85% 20%, 90% 50%,
@@ -77,7 +82,7 @@
   );
 }
 
-/* Tattered edges - wrong looking rectangles */
+/* Tattered edges - solid dark */
 .tatter {
   position: absolute;
   background: #0a0a0a;
@@ -123,7 +128,7 @@
   height: 55px;
 }
 
-/* Head */
+/* Head - solid dark */
 .figure-head {
   position: absolute;
   top: 0;
@@ -140,9 +145,8 @@
   transform: translateX(-50%);
   width: 90px;
   height: 100px;
-  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+  background: linear-gradient(180deg, #181818 0%, #0a0a0a 100%);
   border-radius: 45px 45px 20px 20px;
-  box-shadow: inset 0 -20px 40px rgba(0, 0, 0, 0.8);
 }
 
 .face-void {
@@ -156,7 +160,7 @@
   border-radius: 30px 30px 20px 20px;
 }
 
-/* Eyes - glowing wrong */
+/* Eyes - the only bright elements */
 .eye {
   position: absolute;
   width: 12px;
@@ -165,8 +169,7 @@
   border-radius: 50%;
   box-shadow: 
     0 0 10px #ff0000,
-    0 0 20px #ff0000,
-    0 0 30px rgba(255, 0, 0, 0.5);
+    0 0 20px #ff0000;
   transition: transform 0.1s ease;
 }
 
@@ -176,36 +179,12 @@
 }
 
 .right-eye {
-  top: 18px; /* Slightly asymmetric */
+  top: 18px;
   right: 10px;
-  width: 10px; /* Different size */
+  width: 10px;
 }
 
-.eye-glow {
-  position: absolute;
-  inset: -5px;
-  background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%);
-  animation: eye-pulse 2s ease-in-out infinite;
-}
-
-@keyframes eye-pulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.2); }
-}
-
-.mouth-shadow {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 25px;
-  height: 15px;
-  background: #000;
-  border-radius: 0 0 10px 10px;
-  opacity: 0.5;
-}
-
-/* Arms - way too long, wrong */
+/* Arms - solid dark */
 .arm {
   position: absolute;
   top: 100px;
@@ -223,7 +202,7 @@
 }
 
 .arm-segment {
-  background: linear-gradient(90deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%);
+  background: linear-gradient(90deg, #151515 0%, #0a0a0a 50%, #151515 100%);
 }
 
 .arm-segment.upper {
@@ -253,7 +232,7 @@
   position: absolute;
   width: 6px;
   height: 30px;
-  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+  background: linear-gradient(180deg, #151515 0%, #080808 100%);
   border-radius: 3px;
 }
 
@@ -268,7 +247,7 @@
   transform: rotate(-30deg); 
 }
 
-/* Tendrils at bottom */
+/* Tendrils - solid dark */
 .tendrils {
   position: absolute;
   bottom: -30px;
@@ -281,24 +260,26 @@
   position: absolute;
   bottom: 0;
   width: 8px;
-  background: linear-gradient(180deg, #0d0d0d 0%, transparent 100%);
+  background: #0a0a0a;
   border-radius: 4px;
   transform-origin: top center;
   transition: transform 0.5s ease, height 0.5s ease;
 }
 
-/* Dust particles */
+/* Floating dust particles */
 .dust-particles {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
 }
 
 .dust {
   position: absolute;
   width: 2px;
   height: 2px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(150, 160, 180, 0.25);
   border-radius: 50%;
   animation: dust-float linear infinite;
 }
@@ -309,106 +290,103 @@
     opacity: 0;
   }
   10% {
-    opacity: 0.3;
+    opacity: 0.4;
   }
   90% {
-    opacity: 0.3;
+    opacity: 0.4;
   }
   100% {
-    transform: translateY(-20px) translateX(20px);
+    transform: translateY(-20px) translateX(30px);
     opacity: 0;
   }
 }
 
+/* Labels and UI */
 .portrait-label {
   position: absolute;
-  bottom: 40px;
+  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
-  color: rgba(255, 50, 50, 0.3);
-  font-size: 14px;
-  letter-spacing: 0.3em;
-  text-transform: lowercase;
-  font-style: italic;
   text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: rgba(255, 50, 50, 0.3);
+  letter-spacing: 2px;
+  text-transform: lowercase;
 }
 
-.favorite-hint {
+.portrait-label .favorite-hint {
   display: block;
   margin-top: 8px;
   font-size: 11px;
-  opacity: 0.6;
+  color: rgba(255, 100, 100, 0.25);
 }
 
-/* Stats */
 .portrait-stats {
-  position: fixed;
-  top: 20px;
+  position: absolute;
+  top: 70px;
   left: 20px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  font-family: 'Courier New', monospace;
   font-size: 11px;
-  color: rgba(255, 100, 100, 0.25);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  color: rgba(255, 50, 50, 0.4);
+  letter-spacing: 1px;
 }
 
-.portrait-stats .late-indicator {
-  color: rgba(255, 50, 50, 0.4);
-  margin-top: 8px;
+.late-indicator {
+  color: rgba(255, 100, 100, 0.6);
 }
 
 /* Debug Panel */
 .debug-panel {
   position: fixed;
-  bottom: 10px;
-  right: 10px;
+  bottom: 20px;
+  right: 20px;
   background: rgba(0, 0, 0, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  font-family: 'Courier New', monospace;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.6);
-  min-width: 200px;
-  z-index: 1000;
 }
 
 .debug-title {
   font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 1px;
   color: rgba(255, 255, 255, 0.3);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
 }
 
 .debug-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.debug-row:last-child {
+  margin-bottom: 0;
 }
 
 .debug-row span {
   min-width: 70px;
-  font-size: 10px;
 }
 
 .debug-row button {
-  padding: 4px 8px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.5);
-  font-size: 9px;
+  padding: 4px 8px;
+  border-radius: 4px;
   cursor: pointer;
-  border-radius: 3px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-family: inherit;
+  font-size: 10px;
   transition: all 0.15s ease;
 }
 
@@ -423,25 +401,23 @@
   color: rgba(255, 150, 150, 0.9);
 }
 
+/* Reset button - bottom left */
 .debug-reset {
-  position: fixed !important;
-  bottom: 10px !important;
-  left: 10px !important;
-  right: auto !important;
-  width: auto !important;
-  display: inline-block !important;
-  padding: 8px 12px !important;
-  background: rgba(255, 100, 100, 0.15) !important;
-  border: 1px solid rgba(255, 100, 100, 0.3) !important;
-  color: rgba(255, 150, 150, 0.7) !important;
-  font-size: 10px !important;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255, 100, 100, 0.15);
+  border: 1px solid rgba(255, 100, 100, 0.3);
+  color: rgba(255, 150, 150, 0.7);
+  padding: 8px 16px;
+  border-radius: 4px;
   cursor: pointer;
-  border-radius: 4px !important;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  z-index: 1000 !important;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  transition: all 0.15s ease;
 }
 
 .debug-reset:hover {
-  background: rgba(255, 100, 100, 0.25) !important;
+  background: rgba(255, 100, 100, 0.25);
 }
+/* Force rebuild Mon Jan 12 00:59:46 PST 2026 */

@@ -24,24 +24,15 @@ export default function Portrait() {
 
   // Figure gets closer and larger with visits
   const proximity = useMemo(() => {
-    // 0 = far (first visit), 1 = very close (10+ visits)
     return Math.min(1, effectiveVisits / 10);
   }, [effectiveVisits]);
 
-  // Scale: starts at 0.6, grows to 1.3
   const figureScale = 0.6 + proximity * 0.7;
-  
-  // Position: starts high, moves down (closer to viewer)
-  const figureTop = 50 - proximity * 15; // 50% -> 35%
-  
-  // Arm reach chance increases with visits
+  const figureTop = 50 - proximity * 15;
   const armReachChance = 0.05 + proximity * 0.2;
   const armReachIntensity = 0.6 + proximity * 0.6;
-  
-  // Eye glow intensity
   const eyeIntensity = 0.5 + proximity * 0.5;
 
-  // Status message changes
   const statusMessage = useMemo(() => {
     if (effectiveVisits <= 1) return 'something is there';
     if (effectiveVisits <= 3) return 'it has noticed you';
@@ -50,7 +41,6 @@ export default function Portrait() {
     return 'it is so close now';
   }, [effectiveVisits]);
 
-  // Favorite room reference
   const favoriteHint = useMemo(() => {
     if (!favorite || favorite === 'portrait') return null;
     if (effectiveVisits < 5) return null;
@@ -66,7 +56,6 @@ export default function Portrait() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Animation
   useEffect(() => {
     const animate = () => {
       setTime(t => t + 0.02);
@@ -76,7 +65,6 @@ export default function Portrait() {
     return () => cancelAnimationFrame(animationRef.current);
   }, []);
 
-  // Random flicker - more frequent at night and with more visits
   useEffect(() => {
     const flickerChance = isLateNight ? 0.2 : 0.1;
     const flickerInterval = setInterval(() => {
@@ -88,7 +76,6 @@ export default function Portrait() {
     return () => clearInterval(flickerInterval);
   }, [isLateNight]);
 
-  // Occasionally reach toward cursor - more often with more visits
   useEffect(() => {
     const reachInterval = setInterval(() => {
       if (Math.random() < armReachChance) {
@@ -99,26 +86,21 @@ export default function Portrait() {
     return () => clearInterval(reachInterval);
   }, [armReachChance, armReachIntensity, isLateNight]);
 
-  // Figure leans toward cursor - more pronounced with visits
   const centerX = window.innerWidth / 2;
   const leanAmount = 5 + proximity * 8;
   const lean = (mousePos.x - centerX) / centerX * leanAmount;
   
-  // Eyes track cursor - more intense with visits
   const figureY = window.innerHeight * (figureTop / 100);
   const trackIntensity = 1 + proximity * 0.5;
   const eyeTrackX = Math.max(-1, Math.min(1, (mousePos.x - centerX) / 400)) * trackIntensity;
   const eyeTrackY = Math.max(-1, Math.min(1, (mousePos.y - figureY) / 300)) * trackIntensity;
 
-  // Breathing/swaying - faster at night
   const breatheSpeed = isLateNight ? 1.2 : 0.8;
   const breathe = Math.sin(time * breatheSpeed) * 3;
   const sway = Math.sin(time * 0.5) * 2;
 
-  // Arm reaches toward cursor
   const armAngle = Math.atan2(mousePos.y - figureY, mousePos.x - centerX);
 
-  // Debug reset
   const handleReset = () => {
     localStorage.removeItem('chaos-playground-data');
     window.location.reload();
@@ -126,7 +108,7 @@ export default function Portrait() {
 
   return (
     <div className={`portrait-room ${isLateNight ? 'late-night' : ''}`}>
-      {/* Dark foggy background */}
+      {/* Subtle atmospheric fog */}
       <div className="fog-layer fog-1" />
       <div className="fog-layer fog-2" />
       
@@ -139,18 +121,13 @@ export default function Portrait() {
           top: `${figureTop}%`,
         }}
       >
-        {/* Shadow/aura behind figure */}
-        <div 
-          className="figure-shadow" 
-          style={{ opacity: 0.5 + proximity * 0.3 }}
-        />
+        {/* Shadow/depth behind figure */}
+        <div className="figure-shadow" style={{ opacity: 0.4 + proximity * 0.3 }} />
         
-        {/* Long flowing cloak/body */}
+        {/* Body */}
         <div 
           className="figure-body"
-          style={{
-            transform: `scaleX(${1 + breathe * 0.01})`,
-          }}
+          style={{ transform: `scaleX(${1 + breathe * 0.01})` }}
         >
           <div className="tatter tatter-1" />
           <div className="tatter tatter-2" />
@@ -159,49 +136,31 @@ export default function Portrait() {
           <div className="tatter tatter-5" />
         </div>
 
-        {/* Head area */}
+        {/* Head */}
         <div className="figure-head">
           <div className="hood" />
-          
           <div className="face-void">
-            {/* Eyes - glow increases with visits */}
             <div 
               className="eye left-eye"
               style={{
                 transform: `translate(${eyeTrackX * 3}px, ${eyeTrackY * 2}px)`,
-                boxShadow: `
-                  0 0 ${10 * eyeIntensity}px #ff0000,
-                  0 0 ${20 * eyeIntensity}px #ff0000,
-                  0 0 ${30 * eyeIntensity}px rgba(255, 0, 0, ${eyeIntensity})
-                `,
+                boxShadow: `0 0 ${10 * eyeIntensity}px #ff0000, 0 0 ${20 * eyeIntensity}px #ff0000`,
               }}
-            >
-              <div className="eye-glow" />
-            </div>
+            />
             <div 
               className="eye right-eye"
               style={{
                 transform: `translate(${eyeTrackX * 3}px, ${eyeTrackY * 2}px)`,
-                boxShadow: `
-                  0 0 ${10 * eyeIntensity}px #ff0000,
-                  0 0 ${20 * eyeIntensity}px #ff0000,
-                  0 0 ${30 * eyeIntensity}px rgba(255, 0, 0, ${eyeIntensity})
-                `,
+                boxShadow: `0 0 ${10 * eyeIntensity}px #ff0000, 0 0 ${20 * eyeIntensity}px #ff0000`,
               }}
-            >
-              <div className="eye-glow" />
-            </div>
-            
-            <div className="mouth-shadow" />
+            />
           </div>
         </div>
 
         {/* Arms */}
         <div 
           className="arm left-arm"
-          style={{
-            transform: `rotate(${-20 + breathe}deg)`,
-          }}
+          style={{ transform: `rotate(${-20 + breathe}deg)` }}
         >
           <div className="arm-segment upper" />
           <div className="arm-segment lower" />
@@ -236,7 +195,7 @@ export default function Portrait() {
           </div>
         </div>
 
-        {/* Wispy tendrils at bottom */}
+        {/* Tendrils */}
         <div className="tendrils">
           {Array.from({ length: 8 }).map((_, i) => (
             <div 
@@ -252,16 +211,16 @@ export default function Portrait() {
         </div>
       </div>
 
-      {/* Ambient particles */}
+      {/* Floating dust */}
       <div className="dust-particles">
-        {Array.from({ length: 15 }).map((_, i) => (
+        {Array.from({ length: 20 }).map((_, i) => (
           <div
             key={i}
             className="dust"
             style={{
               left: `${Math.random() * 100}%`,
-              animationDelay: `${i * 0.5}s`,
-              animationDuration: `${8 + Math.random() * 4}s`,
+              animationDelay: `${i * 0.4}s`,
+              animationDuration: `${6 + Math.random() * 4}s`,
             }}
           />
         ))}
@@ -285,44 +244,19 @@ export default function Portrait() {
         
         <div className="debug-row">
           <span>Visits:</span>
-          <button 
-            className={debugVisits === 1 ? 'active' : ''} 
-            onClick={() => setDebugVisits(debugVisits === 1 ? null : 1)}
-          >1</button>
-          <button 
-            className={debugVisits === 3 ? 'active' : ''} 
-            onClick={() => setDebugVisits(debugVisits === 3 ? null : 3)}
-          >3</button>
-          <button 
-            className={debugVisits === 6 ? 'active' : ''} 
-            onClick={() => setDebugVisits(debugVisits === 6 ? null : 6)}
-          >6</button>
-          <button 
-            className={debugVisits === 10 ? 'active' : ''} 
-            onClick={() => setDebugVisits(debugVisits === 10 ? null : 10)}
-          >10</button>
-          <button 
-            className={debugVisits === null ? 'active' : ''} 
-            onClick={() => setDebugVisits(null)}
-          >REAL</button>
+          <button className={debugVisits === 1 ? 'active' : ''} onClick={() => setDebugVisits(debugVisits === 1 ? null : 1)}>1</button>
+          <button className={debugVisits === 3 ? 'active' : ''} onClick={() => setDebugVisits(debugVisits === 3 ? null : 3)}>3</button>
+          <button className={debugVisits === 6 ? 'active' : ''} onClick={() => setDebugVisits(debugVisits === 6 ? null : 6)}>6</button>
+          <button className={debugVisits === 10 ? 'active' : ''} onClick={() => setDebugVisits(debugVisits === 10 ? null : 10)}>10</button>
+          <button className={debugVisits === null ? 'active' : ''} onClick={() => setDebugVisits(null)}>REAL</button>
         </div>
 
         <div className="debug-row">
           <span>Late Night:</span>
-          <button 
-            className={debugLateNight === true ? 'active' : ''} 
-            onClick={() => setDebugLateNight(debugLateNight === true ? null : true)}
-          >ON</button>
-          <button 
-            className={debugLateNight === false ? 'active' : ''} 
-            onClick={() => setDebugLateNight(debugLateNight === false ? null : false)}
-          >OFF</button>
-          <button 
-            className={debugLateNight === null ? 'active' : ''} 
-            onClick={() => setDebugLateNight(null)}
-          >AUTO</button>
+          <button className={debugLateNight === true ? 'active' : ''} onClick={() => setDebugLateNight(debugLateNight === true ? null : true)}>ON</button>
+          <button className={debugLateNight === false ? 'active' : ''} onClick={() => setDebugLateNight(debugLateNight === false ? null : false)}>OFF</button>
+          <button className={debugLateNight === null ? 'active' : ''} onClick={() => setDebugLateNight(null)}>AUTO</button>
         </div>
-
       </div>
 
       <button onClick={handleReset} className="debug-reset">Reset All Data</button>
