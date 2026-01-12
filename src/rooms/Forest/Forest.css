@@ -1,0 +1,702 @@
+.forest-room {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  transition: background 1.5s ease;
+}
+
+/* ========== TIME OF DAY THEMES ========== */
+
+/* Morning */
+.forest-room.time-morning .sky {
+  background: linear-gradient(
+    180deg,
+    #4a6fa5 0%,
+    #7da0ca 30%,
+    #f5d6ba 70%,
+    #f0b89a 100%
+  );
+}
+
+.forest-room.time-morning .celestial-body.sun {
+  top: 25%;
+  right: 20%;
+  background: radial-gradient(
+    circle at 40% 40%,
+    #fff5e0 0%,
+    #ffe8a8 60%,
+    #ffd060 100%
+  );
+  box-shadow: 0 0 60px rgba(255, 220, 100, 0.5);
+}
+
+/* Afternoon */
+.forest-room.time-afternoon .sky {
+  background: linear-gradient(
+    180deg,
+    #3a5a8a 0%,
+    #5a8ab5 40%,
+    #8dc0e0 70%,
+    #a8d0e8 100%
+  );
+}
+
+.forest-room.time-afternoon .celestial-body.sun {
+  top: 10%;
+  right: 40%;
+  background: radial-gradient(
+    circle at 40% 40%,
+    #ffffff 0%,
+    #fff5d0 60%,
+    #ffe080 100%
+  );
+  box-shadow: 0 0 80px rgba(255, 240, 150, 0.6);
+}
+
+/* Evening */
+.forest-room.time-evening .sky {
+  background: linear-gradient(
+    180deg,
+    #1a1a3e 0%,
+    #3d2a5a 30%,
+    #7a4a6a 60%,
+    #c06050 85%,
+    #3d4a3a 100%
+  );
+}
+
+.forest-room.time-evening .celestial-body.moon {
+  top: 15%;
+  right: 15%;
+  background: radial-gradient(
+    circle at 40% 40%,
+    #f5f5dc 0%,
+    #e8e8c8 60%,
+    #d4d4a8 100%
+  );
+  box-shadow: 0 0 40px rgba(245, 245, 220, 0.3);
+}
+
+/* Night */
+.forest-room.time-night .sky {
+  background: linear-gradient(
+    180deg,
+    #0a0a1a 0%,
+    #1a1a2e 40%,
+    #2a2a3e 70%,
+    #1a2a1a 100%
+  );
+}
+
+.forest-room.time-night .celestial-body.moon {
+  top: 10%;
+  right: 15%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #f0f0e0 0%,
+    #d8d8c0 50%,
+    #b8b8a0 100%
+  );
+  box-shadow: 0 0 60px rgba(240, 240, 220, 0.4);
+}
+
+/* Default sky fallback */
+.sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #1a1a2e 0%,
+    #2d3a4a 40%,
+    #4a5a6a 70%,
+    #3d4a3a 100%
+  );
+  transition: background 1.5s ease;
+}
+
+.celestial-body {
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  transition: all 1.5s ease;
+}
+
+/* Fog layer */
+.fog-layer {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(0deg, rgba(200, 210, 200, 0.6) 0%, transparent 40%),
+    radial-gradient(ellipse at 30% 60%, rgba(180, 190, 180, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(190, 200, 190, 0.5) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 50;
+  transition: opacity 1s ease;
+}
+
+/* Tree layers for parallax */
+.tree-layer {
+  position: absolute;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tree-layer.layer-2 {
+  opacity: 0.4;
+  filter: blur(2px);
+}
+
+.tree-layer.layer-1 {
+  opacity: 0.7;
+  filter: blur(1px);
+}
+
+.tree-layer.layer-0 {
+  opacity: 1;
+}
+
+/* Tree */
+.tree {
+  position: absolute;
+  bottom: 0;
+  transform-origin: bottom center;
+  transition: transform 0.5s ease;
+}
+
+.trunk {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--trunk-width);
+  height: calc(var(--tree-height) * 0.4);
+  background: linear-gradient(
+    90deg,
+    #3d2817 0%,
+    #5c3d2a 50%,
+    #3d2817 100%
+  );
+  border-radius: 5px 5px 0 0;
+}
+
+.foliage {
+  position: absolute;
+  bottom: calc(var(--tree-height) * 0.35);
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--foliage-size);
+  height: var(--foliage-size);
+}
+
+.foliage-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #2d5a3d;
+  border-radius: 50% 50% 50% 50%;
+}
+
+.foliage-layer.layer-2 {
+  width: 80%;
+  height: 80%;
+  left: 10%;
+  top: -20%;
+  background: #3d6a4d;
+}
+
+.foliage-layer.layer-3 {
+  width: 50%;
+  height: 50%;
+  left: 25%;
+  top: -35%;
+  background: #4d7a5d;
+}
+
+/* Time-based foliage colors */
+.time-morning .foliage-layer { background: #3d6a4d; }
+.time-morning .foliage-layer.layer-2 { background: #4d7a5d; }
+.time-morning .foliage-layer.layer-3 { background: #5d8a6d; }
+
+.time-afternoon .foliage-layer { background: #4d7a5d; }
+.time-afternoon .foliage-layer.layer-2 { background: #5d8a6d; }
+.time-afternoon .foliage-layer.layer-3 { background: #6d9a7d; }
+
+.time-evening .foliage-layer { background: #2d4a3d; }
+.time-evening .foliage-layer.layer-2 { background: #3d5a4d; }
+.time-evening .foliage-layer.layer-3 { background: #4d6a5d; }
+
+.time-night .foliage-layer { background: #1a3a2a; }
+.time-night .foliage-layer.layer-2 { background: #2a4a3a; }
+.time-night .foliage-layer.layer-3 { background: #3a5a4a; }
+
+/* Hidden watching eyes */
+.eyes-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.hidden-eye {
+  position: absolute;
+  width: var(--eye-size);
+  height: calc(var(--eye-size) * 0.6);
+  background: rgba(255, 255, 150, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: eye-glow 3s ease-in-out infinite;
+}
+
+.time-night .hidden-eye {
+  background: rgba(255, 200, 100, 0.9);
+  box-shadow: 0 0 10px rgba(255, 200, 100, 0.5);
+}
+
+.eye-pupil {
+  width: 40%;
+  height: 60%;
+  background: #111;
+  border-radius: 50%;
+  transition: transform 0.1s ease;
+}
+
+@keyframes eye-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+}
+
+/* Owl */
+.owl {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 25;
+  animation: owl-bob 4s ease-in-out infinite;
+}
+
+@keyframes owl-bob {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-3px); }
+}
+
+.owl-body {
+  width: 30px;
+  height: 40px;
+  background: linear-gradient(
+    180deg,
+    #5a4a3a 0%,
+    #4a3a2a 50%,
+    #3a2a1a 100%
+  );
+  border-radius: 50% 50% 40% 40%;
+  position: relative;
+}
+
+.owl-head {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35px;
+  height: 30px;
+  transition: transform 0.2s ease;
+}
+
+.owl-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    #e8d8c8 0%,
+    #c8b8a8 50%,
+    #5a4a3a 100%
+  );
+  border-radius: 50%;
+}
+
+.owl-eye {
+  position: absolute;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #fff 0%,
+    #ff0 50%,
+    #fa0 100%
+  );
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 200, 0, 0.5);
+}
+
+.owl-eye.left { left: 4px; }
+.owl-eye.right { right: 4px; }
+
+.owl-pupil {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 6px;
+  height: 6px;
+  background: #000;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+
+.owl-beak {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 8px solid #8a6a4a;
+}
+
+.owl-ear {
+  position: absolute;
+  top: -5px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 12px solid #5a4a3a;
+}
+
+.owl-ear.left { left: 2px; transform: rotate(-15deg); }
+.owl-ear.right { right: 2px; transform: rotate(15deg); }
+
+/* Deer */
+.deer {
+  position: absolute;
+  bottom: 100px;
+  width: 80px;
+  height: 60px;
+  transform: translateX(-50%);
+  z-index: 30;
+  animation: deer-appear 0.5s ease-out;
+}
+
+@keyframes deer-appear {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.deer-body {
+  position: absolute;
+  bottom: 20px;
+  left: 10px;
+  width: 50px;
+  height: 25px;
+  background: linear-gradient(180deg, #8b7355 0%, #6b5344 100%);
+  border-radius: 10px;
+}
+
+.deer-leg {
+  position: absolute;
+  width: 6px;
+  height: 25px;
+  background: #6b5344;
+  border-radius: 3px;
+  transform-origin: top center;
+  transition: transform 0.1s linear;
+}
+
+.deer-leg.front-left { bottom: 0; left: 15px; }
+.deer-leg.front-right { bottom: 0; left: 25px; }
+.deer-leg.back-left { bottom: 0; left: 45px; }
+.deer-leg.back-right { bottom: 0; left: 55px; }
+
+.deer-head {
+  position: absolute;
+  bottom: 35px;
+  left: -5px;
+  width: 25px;
+  height: 20px;
+  background: linear-gradient(180deg, #8b7355 0%, #7b6345 100%);
+  border-radius: 50% 50% 40% 40%;
+  transform-origin: right center;
+  transition: transform 0.2s ease;
+}
+
+.deer-ear {
+  position: absolute;
+  top: -8px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 12px solid #8b7355;
+  transform-origin: bottom center;
+  transition: transform 0.1s ease;
+}
+
+.deer-ear.left { left: 3px; }
+.deer-ear.right { right: 3px; }
+
+.deer-eye {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.deer-pupil {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 5px;
+  height: 5px;
+  background: #111;
+  border-radius: 50%;
+}
+
+.antler {
+  position: absolute;
+  top: -15px;
+  width: 2px;
+  height: 15px;
+  background: #5c4a3a;
+}
+
+.antler.left {
+  left: 5px;
+  transform: rotate(-20deg);
+}
+
+.antler.right {
+  right: 5px;
+  transform: rotate(20deg);
+}
+
+.antler::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 8px;
+  background: inherit;
+  transform: rotate(40deg);
+  transform-origin: bottom;
+}
+
+.deer-tail {
+  position: absolute;
+  bottom: 30px;
+  right: -5px;
+  width: 8px;
+  height: 10px;
+  background: #f5f5dc;
+  border-radius: 50%;
+}
+
+/* Birds */
+.bird {
+  position: absolute;
+  width: 20px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  z-index: 60;
+}
+
+.bird-body {
+  position: absolute;
+  width: 12px;
+  height: 8px;
+  background: #2a2a2a;
+  border-radius: 50%;
+  left: 4px;
+  top: 1px;
+}
+
+.bird-wing {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-bottom: 8px solid #333;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  transform-origin: bottom center;
+  transition: transform 0.08s linear;
+}
+
+.bird-wing.left { left: 2px; }
+.bird-wing.right { right: 2px; }
+
+/* Ground */
+.ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(
+    0deg,
+    #1a2a1a 0%,
+    #2d3a2d 50%,
+    #3d4a3d 100%
+  );
+  z-index: 40;
+}
+
+.ground::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(0deg, transparent, rgba(0, 0, 0, 0.2));
+}
+
+/* Time-based ground */
+.time-morning .ground {
+  background: linear-gradient(0deg, #2a3a2a 0%, #3d4d3d 50%, #4d5d4d 100%);
+}
+
+.time-afternoon .ground {
+  background: linear-gradient(0deg, #3a4a3a 0%, #4d5d4d 50%, #5d6d5d 100%);
+}
+
+.time-evening .ground {
+  background: linear-gradient(0deg, #1a2a2a 0%, #2d3d3d 50%, #3d4d4d 100%);
+}
+
+.time-night .ground {
+  background: linear-gradient(0deg, #0a1a0a 0%, #1a2a1a 50%, #2a3a2a 100%);
+}
+
+/* Stats */
+.forest-stats {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(85, 239, 196, 0.3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 100;
+}
+
+.forest-stats .unlock-indicator {
+  color: rgba(150, 255, 200, 0.5);
+  margin-top: 4px;
+}
+
+.forest-label {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(85, 239, 196, 0.3);
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  text-transform: lowercase;
+  font-style: italic;
+  z-index: 100;
+}
+
+/* Debug Panel */
+.debug-panel {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  min-width: 200px;
+  z-index: 1000;
+}
+
+.debug-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.debug-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.debug-row span {
+  min-width: 50px;
+  font-size: 10px;
+}
+
+.debug-row button {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 9px;
+  cursor: pointer;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.15s ease;
+}
+
+.debug-row button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.debug-row button.active {
+  background: rgba(85, 239, 196, 0.2);
+  border-color: rgba(85, 239, 196, 0.4);
+  color: rgba(150, 255, 200, 0.9);
+}
+
+.debug-reset {
+  position: fixed !important;
+  bottom: 10px !important;
+  left: 10px !important;
+  right: auto !important;
+  width: auto !important;
+  display: inline-block !important;
+  padding: 8px 12px !important;
+  background: rgba(255, 100, 100, 0.15) !important;
+  border: 1px solid rgba(255, 100, 100, 0.3) !important;
+  color: rgba(255, 150, 150, 0.7) !important;
+  font-size: 10px !important;
+  cursor: pointer;
+  border-radius: 4px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 1000 !important;
+}
+
+.debug-reset:hover {
+  background: rgba(255, 100, 100, 0.25) !important;
+}

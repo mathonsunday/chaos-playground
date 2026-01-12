@@ -1,0 +1,210 @@
+.hub {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hub-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: background 0.3s ease;
+}
+
+/* Floating background particles */
+.hub-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hub-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: float-particle linear infinite;
+}
+
+@keyframes float-particle {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-100px) translateX(30px) scale(1.5);
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.5;
+  }
+}
+
+.hub-content {
+  text-align: center;
+  z-index: 1;
+  padding: 20px;
+}
+
+.hub-title {
+  font-size: clamp(2rem, 8vw, 5rem);
+  font-weight: 100;
+  letter-spacing: 0.3em;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.title-char {
+  display: inline-block;
+  animation: title-wave 3s ease-in-out infinite;
+  background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.title-space {
+  width: 0.5em;
+}
+
+@keyframes title-wave {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.hub-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.2em;
+  margin-bottom: 60px;
+  font-weight: 300;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.room-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  font-family: inherit;
+  text-align: left;
+}
+
+.room-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--card-color);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.card-inner {
+  position: relative;
+  z-index: 1;
+  padding: 24px;
+}
+
+.card-preview {
+  height: 120px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.preview-animation {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 30% 30%, var(--card-color) 0%, transparent 30%),
+    radial-gradient(circle at 70% 60%, var(--card-glow) 0%, transparent 40%);
+  opacity: 0.6;
+  animation: preview-pulse 4s ease-in-out infinite;
+}
+
+@keyframes preview-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: blur(20px);
+  }
+  50% {
+    transform: scale(1.2);
+    filter: blur(30px);
+  }
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--card-color);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+  transition: text-shadow 0.3s ease;
+}
+
+.room-card:hover .card-title {
+  text-shadow: 0 0 20px var(--card-glow);
+}
+
+.card-description {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.card-glow {
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(circle, var(--card-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.room-card:hover .card-glow {
+  opacity: 0.3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .hub-title {
+    letter-spacing: 0.15em;
+  }
+  
+  .room-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hub-subtitle {
+    margin-bottom: 40px;
+  }
+}

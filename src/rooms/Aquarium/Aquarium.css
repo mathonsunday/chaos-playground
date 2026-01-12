@@ -1,0 +1,634 @@
+.aquarium-room {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: #010a15;
+  transition: background 1s ease;
+}
+
+.aquarium-room.late-night {
+  background: #000508;
+}
+
+/* Deep water gradient */
+.water-depth {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #0a2540 0%,
+    #051525 20%,
+    #020d18 50%,
+    #010810 80%,
+    #000508 100%
+  );
+}
+
+/* Caustic light patterns - attempting realistic water light */
+.caustics {
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background: 
+    repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      transparent 0deg,
+      rgba(100, 200, 255, 0.3) 1deg,
+      transparent 2deg
+    );
+  background-size: 100px 100px;
+  mix-blend-mode: overlay;
+  animation: caustic-move 20s linear infinite;
+}
+
+@keyframes caustic-move {
+  to { transform: translateX(50px) translateY(25px); }
+}
+
+/* Light rays */
+.light-rays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
+}
+
+.light-ray {
+  position: absolute;
+  top: -10%;
+  width: 80px;
+  height: 120%;
+  background: linear-gradient(
+    180deg,
+    rgba(150, 220, 255, 0.15) 0%,
+    rgba(100, 180, 220, 0.05) 40%,
+    transparent 80%
+  );
+  transform-origin: top center;
+}
+
+/* Floating particles */
+.particles-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.water-particle {
+  position: absolute;
+  background: rgba(200, 230, 255, 0.6);
+  border-radius: 50%;
+}
+
+/* ========== JELLYFISH - Realistic attempt ========== */
+.jellyfish {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.jelly-bell {
+  width: var(--jelly-size);
+  height: calc(var(--jelly-size) * 0.6);
+  position: relative;
+  transition: transform 0.4s ease;
+}
+
+.jelly-bell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    rgba(255, 220, 240, 0.3) 0%,
+    rgba(200, 180, 220, 0.2) 40%,
+    rgba(150, 140, 180, 0.15) 70%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 40% 40%;
+  box-shadow: 
+    inset 0 -10px 30px rgba(255, 200, 230, 0.1),
+    0 0 40px rgba(200, 150, 200, 0.2);
+}
+
+.bell-inner {
+  position: absolute;
+  top: 20%;
+  left: 15%;
+  right: 15%;
+  height: 50%;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 230, 245, 0.15) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+}
+
+.bell-rim {
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  right: 5%;
+  height: 15%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 200, 230, 0.2) 50%,
+    rgba(200, 150, 180, 0.3) 100%
+  );
+  border-radius: 0 0 50% 50%;
+}
+
+.jelly-organs {
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  right: 30%;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  gap: 5%;
+}
+
+.organ {
+  width: 15%;
+  height: 80%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 150, 180, 0.4) 0%,
+    rgba(200, 100, 150, 0.3) 100%
+  );
+  border-radius: 30% 30% 50% 50%;
+}
+
+.oral-arms {
+  position: absolute;
+  top: calc(var(--jelly-size) * 0.55);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.oral-arm {
+  width: 8px;
+  height: 35px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 200, 220, 0.4) 0%,
+    rgba(255, 180, 200, 0.2) 100%
+  );
+  border-radius: 4px 4px 2px 2px;
+  transform-origin: top center;
+  margin: 0 2px;
+}
+
+.tentacles {
+  position: absolute;
+  top: calc(var(--jelly-size) * 0.6);
+  left: 0;
+  right: 0;
+  height: 100px;
+}
+
+.tentacle {
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 200, 230, 0.4) 0%,
+    rgba(200, 150, 200, 0.1) 100%
+  );
+  transform-origin: top center;
+  transition: height 0.5s ease, transform 0.3s ease;
+}
+
+/* ========== FISH - Realistic attempt ========== */
+.fish {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: transform 0.1s linear;
+}
+
+.fish-body {
+  width: var(--fish-size);
+  height: calc(var(--fish-size) * 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Long fish */
+.fish-long .fish-body {
+  background: linear-gradient(
+    180deg,
+    hsl(var(--fish-hue), 50%, 60%) 0%,
+    hsl(var(--fish-hue), 40%, 40%) 50%,
+    hsl(var(--fish-hue), 50%, 50%) 100%
+  );
+  border-radius: 60% 40% 40% 60%;
+  box-shadow: 
+    inset 0 5px 15px rgba(255, 255, 255, 0.2),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Round fish */
+.fish-round .fish-body {
+  height: calc(var(--fish-size) * 0.6);
+  background: linear-gradient(
+    180deg,
+    hsl(var(--fish-hue), 60%, 65%) 0%,
+    hsl(var(--fish-hue), 50%, 45%) 50%,
+    hsl(var(--fish-hue), 55%, 55%) 100%
+  );
+  border-radius: 50% 50% 50% 50%;
+  box-shadow: 
+    inset 0 8px 20px rgba(255, 255, 255, 0.25),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Flat fish */
+.fish-flat .fish-body {
+  height: calc(var(--fish-size) * 0.3);
+  background: linear-gradient(
+    180deg,
+    hsl(var(--fish-hue), 45%, 55%) 0%,
+    hsl(var(--fish-hue), 35%, 35%) 100%
+  );
+  border-radius: 50% 30% 30% 50%;
+  box-shadow: 
+    inset 0 3px 10px rgba(255, 255, 255, 0.2),
+    inset 0 -3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Scales texture - subtle pattern */
+.scales {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.05) 3px,
+    rgba(0, 0, 0, 0.05) 4px
+  );
+  opacity: 0.5;
+  border-radius: inherit;
+}
+
+.lateral-line {
+  position: absolute;
+  top: 45%;
+  left: 10%;
+  right: 30%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 20%,
+    rgba(0, 0, 0, 0.2) 80%,
+    transparent 100%
+  );
+}
+
+.fish-tail {
+  position: absolute;
+  right: -15%;
+  top: 10%;
+  width: 0;
+  height: 0;
+  border-left: calc(var(--fish-size) * 0.25) solid hsl(var(--fish-hue), 45%, 50%);
+  border-top: calc(var(--fish-size) * 0.2) solid transparent;
+  border-bottom: calc(var(--fish-size) * 0.2) solid transparent;
+  transform-origin: left center;
+  transition: transform 0.08s ease;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+.fish-dorsal {
+  position: absolute;
+  top: -20%;
+  left: 30%;
+  width: 0;
+  height: 0;
+  border-bottom: calc(var(--fish-size) * 0.15) solid hsl(var(--fish-hue), 50%, 55%);
+  border-left: calc(var(--fish-size) * 0.1) solid transparent;
+  border-right: calc(var(--fish-size) * 0.15) solid transparent;
+}
+
+.fish-pectoral {
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  width: calc(var(--fish-size) * 0.15);
+  height: calc(var(--fish-size) * 0.1);
+  background: hsl(var(--fish-hue), 40%, 45%);
+  border-radius: 0 0 50% 50%;
+  transform: rotate(20deg);
+}
+
+.fish-eye {
+  position: absolute;
+  top: 25%;
+  left: 10%;
+  width: calc(var(--fish-size) * 0.12);
+  height: calc(var(--fish-size) * 0.12);
+  background: radial-gradient(
+    circle at 30% 30%,
+    #fff 0%,
+    #f0f0f0 40%,
+    #e0e0e0 100%
+  );
+  border-radius: 50%;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.fish-pupil {
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(
+    circle at 40% 40%,
+    #222 0%,
+    #000 100%
+  );
+  border-radius: 50%;
+}
+
+/* Simple ocean floor */
+.ocean-floor-simple {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(
+    0deg,
+    #020508 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.aquarium-label {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(100, 180, 220, 0.3);
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  text-transform: lowercase;
+  z-index: 100;
+}
+
+/* Late night bioluminescence for jellyfish */
+.jellyfish.bioluminescent .jelly-bell::before {
+  box-shadow: 
+    inset 0 -10px 30px rgba(255, 200, 230, 0.2),
+    0 0 60px rgba(150, 200, 255, 0.4),
+    0 0 100px rgba(100, 150, 255, 0.2);
+}
+
+.jellyfish.bioluminescent .tentacle {
+  background: linear-gradient(
+    180deg,
+    rgba(150, 200, 255, 0.5) 0%,
+    rgba(100, 150, 255, 0.2) 100%
+  );
+}
+
+/* Rare creature - anglerfish */
+.rare-creature {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 80px;
+  z-index: 5;
+  opacity: 0.7;
+  transition: opacity 0.5s ease;
+}
+
+.angler-body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at 40% 50%,
+    #1a1520 0%,
+    #0a0810 60%,
+    #050508 100%
+  );
+  border-radius: 60% 40% 45% 55%;
+  box-shadow: 
+    inset 0 -10px 20px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.angler-lure {
+  position: absolute;
+  top: -40px;
+  left: 30%;
+  width: 3px;
+  height: 50px;
+  background: linear-gradient(
+    180deg,
+    rgba(100, 150, 200, 0.3) 0%,
+    transparent 100%
+  );
+  border-radius: 2px;
+  transform-origin: bottom center;
+}
+
+.lure-light {
+  position: absolute;
+  top: -15px;
+  left: -8px;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(
+    circle,
+    rgba(150, 220, 255, 0.9) 0%,
+    rgba(100, 180, 255, 0.6) 40%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px rgba(150, 220, 255, 0.8),
+    0 0 40px rgba(100, 180, 255, 0.5),
+    0 0 60px rgba(80, 150, 255, 0.3);
+}
+
+.angler-eye {
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  width: 15px;
+  height: 15px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #fff 0%,
+    #aaa 30%,
+    #333 70%,
+    #000 100%
+  );
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.angler-teeth {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  width: 40%;
+  height: 30%;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.tooth {
+  width: 4px;
+  height: 12px;
+  background: linear-gradient(180deg, #f0f0e0 0%, #d0d0c0 100%);
+  clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+}
+
+.tooth:nth-child(odd) {
+  height: 15px;
+}
+
+.angler-fin {
+  position: absolute;
+  top: 20%;
+  right: 5%;
+  width: 20px;
+  height: 40px;
+  background: linear-gradient(
+    90deg,
+    rgba(30, 25, 35, 0.8) 0%,
+    transparent 100%
+  );
+  clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
+  transform-origin: left center;
+}
+
+/* Stats */
+.aquarium-stats {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(100, 180, 220, 0.25);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 100;
+}
+
+.aquarium-stats .rare-indicator {
+  color: rgba(150, 220, 255, 0.5);
+  margin-top: 8px;
+}
+
+.aquarium-stats .late-indicator {
+  color: rgba(150, 200, 255, 0.4);
+  margin-top: 4px;
+}
+
+/* Debug Panel */
+.debug-panel {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  min-width: 200px;
+  z-index: 1000;
+}
+
+.debug-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.debug-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.debug-row span {
+  min-width: 70px;
+  font-size: 10px;
+}
+
+.debug-row button {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 9px;
+  cursor: pointer;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.15s ease;
+}
+
+.debug-row button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.debug-row button.active {
+  background: rgba(100, 180, 220, 0.2);
+  border-color: rgba(100, 180, 220, 0.4);
+  color: rgba(150, 200, 255, 0.9);
+}
+
+.debug-reset {
+  position: fixed !important;
+  bottom: 10px !important;
+  left: 10px !important;
+  right: auto !important;
+  width: auto !important;
+  display: inline-block !important;
+  padding: 8px 12px !important;
+  background: rgba(255, 100, 100, 0.15) !important;
+  border: 1px solid rgba(255, 100, 100, 0.3) !important;
+  color: rgba(255, 150, 150, 0.7) !important;
+  font-size: 10px !important;
+  cursor: pointer;
+  border-radius: 4px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 1000 !important;
+}
+
+.debug-reset:hover {
+  background: rgba(255, 100, 100, 0.25) !important;
+}
