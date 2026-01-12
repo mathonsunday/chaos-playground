@@ -1,0 +1,355 @@
+.lure-room {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: #020810;
+  cursor: none;
+}
+
+/* Deep water gradient - NOT pure black, subtle blue tones */
+.deep-water {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 30% 70%, rgba(10, 30, 60, 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 30%, rgba(5, 20, 50, 0.4) 0%, transparent 50%),
+    linear-gradient(180deg, #030812 0%, #050a18 50%, #020610 100%);
+}
+
+/* Floating particles for depth */
+.water-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(100, 150, 200, 0.3);
+  border-radius: 50%;
+  animation: drift-up linear infinite;
+}
+
+@keyframes drift-up {
+  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(-20px) translateX(20px); opacity: 0; }
+}
+
+/* Deep background creatures - massive barely-visible silhouettes */
+.deep-creature {
+  position: absolute;
+  background: radial-gradient(
+    ellipse at 30% 50%,
+    rgba(20, 30, 50, 0.4) 0%,
+    rgba(10, 20, 40, 0.2) 50%,
+    transparent 70%
+  );
+  border-radius: 50% 60% 50% 40%;
+  pointer-events: none;
+  filter: blur(8px);
+  z-index: 1;
+}
+
+/* ========== THE LURE (CURSOR LIGHT) ========== */
+.lure {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 100;
+}
+
+.lure-core {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: -10px;
+  top: -10px;
+  background: radial-gradient(
+    circle,
+    #fff 0%,
+    #aff 30%,
+    #4af 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: pulse-core 1s ease-in-out infinite;
+}
+
+@keyframes pulse-core {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.lure-glow {
+  position: absolute;
+  width: calc(var(--lure-radius) * 0.5);
+  height: calc(var(--lure-radius) * 0.5);
+  left: calc(var(--lure-radius) * -0.25);
+  top: calc(var(--lure-radius) * -0.25);
+  background: radial-gradient(
+    circle,
+    rgba(100, 200, 255, 0.4) 0%,
+    rgba(50, 150, 255, 0.2) 40%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  filter: blur(10px);
+}
+
+.lure-outer {
+  position: absolute;
+  width: var(--lure-radius);
+  height: var(--lure-radius);
+  left: calc(var(--lure-radius) * -0.5);
+  top: calc(var(--lure-radius) * -0.5);
+  background: radial-gradient(
+    circle,
+    rgba(80, 150, 255, 0.15) 0%,
+    rgba(50, 100, 200, 0.05) 50%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  filter: blur(20px);
+}
+
+.lure-stalk {
+  position: absolute;
+  width: 3px;
+  height: 40px;
+  left: -1.5px;
+  top: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(100, 200, 255, 0.4) 0%,
+    rgba(80, 150, 200, 0.2) 50%,
+    transparent 100%
+  );
+  border-radius: 2px;
+  transform-origin: top center;
+}
+
+/* ========== CREATURES ========== */
+.creature {
+  position: absolute;
+  pointer-events: none;
+  transition: filter 0.3s ease;
+}
+
+/* Base glow for all creatures - ALWAYS VISIBLE */
+.creature::before {
+  content: '';
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  left: -25%;
+  top: -25%;
+  background: radial-gradient(
+    circle,
+    rgba(100, 180, 255, calc(var(--creature-glow) * 0.5)) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  filter: blur(5px);
+}
+
+/* When illuminated by the lure */
+.creature.illuminated::before {
+  background: radial-gradient(
+    circle,
+    rgba(150, 220, 255, calc(var(--creature-glow) * 0.8)) 0%,
+    transparent 60%
+  );
+}
+
+.creature.attracted {
+  filter: brightness(1.3);
+}
+
+/* Small fish creature */
+.creature-small {
+  width: var(--creature-size);
+  height: calc(var(--creature-size) * 0.4);
+}
+
+.small-body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(100, 200, 255, 0.7) 0%,
+    rgba(50, 150, 200, 0.5) 100%
+  );
+  border-radius: 50% 30% 30% 50%;
+  box-shadow: 
+    0 0 10px rgba(100, 200, 255, calc(var(--creature-glow) * 0.5)),
+    inset 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.small-tail {
+  position: absolute;
+  right: -30%;
+  top: 10%;
+  width: 0;
+  height: 0;
+  border-left: calc(var(--creature-size) * 0.4) solid rgba(80, 180, 255, 0.6);
+  border-top: calc(var(--creature-size) * 0.2) solid transparent;
+  border-bottom: calc(var(--creature-size) * 0.2) solid transparent;
+  transform-origin: left center;
+}
+
+/* Medium fish creature */
+.creature-medium {
+  width: var(--creature-size);
+  height: calc(var(--creature-size) * 0.5);
+}
+
+.medium-body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(150, 100, 255, 0.7) 0%,
+    rgba(100, 50, 200, 0.5) 100%
+  );
+  border-radius: 50%;
+  box-shadow: 
+    0 0 15px rgba(150, 100, 255, calc(var(--creature-glow) * 0.6)),
+    inset 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.medium-fin {
+  position: absolute;
+  left: 30%;
+  width: calc(var(--creature-size) * 0.3);
+  height: calc(var(--creature-size) * 0.2);
+  background: rgba(150, 100, 255, 0.5);
+  border-radius: 50%;
+  transform-origin: center center;
+}
+
+.medium-fin.top {
+  top: -15%;
+}
+
+.medium-fin.bottom {
+  bottom: -15%;
+}
+
+.medium-eye {
+  position: absolute;
+  left: 15%;
+  top: 30%;
+  width: calc(var(--creature-size) * 0.15);
+  height: calc(var(--creature-size) * 0.15);
+  background: radial-gradient(
+    circle at 30% 30%,
+    #fff 0%,
+    #aaf 50%,
+    #226 100%
+  );
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Jellyfish creature */
+.creature-jellyfish {
+  width: var(--creature-size);
+  height: calc(var(--creature-size) * 1.5);
+}
+
+.jelly-bell {
+  width: 100%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    rgba(255, 150, 200, 0.6) 0%,
+    rgba(200, 100, 255, 0.4) 50%,
+    rgba(150, 50, 200, 0.3) 100%
+  );
+  border-radius: 50% 50% 30% 30%;
+  box-shadow: 
+    0 0 20px rgba(255, 150, 200, calc(var(--creature-glow) * 0.6)),
+    inset 0 -10px 20px rgba(255, 200, 255, 0.2);
+  transform-origin: center top;
+}
+
+.jelly-tentacles {
+  position: absolute;
+  top: 55%;
+  left: 10%;
+  width: 80%;
+  height: 50%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.jelly-tentacle {
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 150, 200, 0.5) 0%,
+    rgba(200, 100, 255, 0.2) 100%
+  );
+  border-radius: 2px;
+  transform-origin: top center;
+}
+
+/* Stats */
+.lure-stats {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(100, 180, 255, 0.3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.lure-label {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(100, 180, 255, 0.3);
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  text-transform: lowercase;
+  font-style: italic;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Reset button */
+.debug-reset {
+  position: fixed !important;
+  bottom: 10px !important;
+  left: 10px !important;
+  right: auto !important;
+  width: auto !important;
+  display: inline-block !important;
+  padding: 8px 12px !important;
+  background: rgba(255, 100, 100, 0.15) !important;
+  border: 1px solid rgba(255, 100, 100, 0.3) !important;
+  color: rgba(255, 150, 150, 0.7) !important;
+  font-size: 10px !important;
+  cursor: pointer;
+  border-radius: 4px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 1000 !important;
+}
+
+.debug-reset:hover {
+  background: rgba(255, 100, 100, 0.25) !important;
+}

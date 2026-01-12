@@ -156,10 +156,11 @@ export function usePersonalization() {
 
 // Room name mappings for display
 export const roomDisplayNames: Record<string, string> = {
-  'cursor-swarm': 'the Swarm',
   'typography': 'the Words',
   'portrait': 'the Figure',
   'aquarium': 'the Aquarium',
   'forest': 'the Forest',
   'pet': 'the Creature',
+  'console': 'the Console',
+  'lure': 'the Lure',
 };
