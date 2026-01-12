@@ -81,44 +81,36 @@ This project served as an exploration of different web technologies for visual e
 - Limited control over precise timing/physics
 - Blur and shadows are expensive at scale
 
-### Canvas 2D (Explored but not kept)
-
-**Best for:**
-- Smooth particle systems (marine snow, dust, etc.)
-- Soft glows and radial gradients
-- Per-frame animation control
-- Many small elements with good performance
+### Canvas 2D (Explored, didn't land)
 
 **What we tried:**
 - Atmospheric underwater scene with floating particles
-- Radial gradient "bioluminescence" effects
+- Radial gradient "bioluminescence" effects  
 - Vignette and depth effects
 
-**Learnings:**
-- Great for atmosphere and ambient effects
-- Requires manual render loop management
-- Works well alongside DOM/CSS elements
-- Better performance than CSS for many particles
+**Why it wasn't kept:**
+- Output was too abstract — soft glowing shapes without recognizable form
+- Lacked the detail and character needed to be interesting
+- "Atmospheric" became "vague" — nothing concrete to look at
+- The technology worked fine, but the result was underwhelming
 
-### SVG (Explored but not kept)
+**Theoretical strengths:** smooth particles, soft glows, good performance for many elements
 
-**Best for:**
-- Detailed, scalable vector illustrations
-- Anatomically accurate creatures/characters
-- Crisp edges at any size
-- Complex shapes with gradients and filters
+### SVG (Explored, didn't land)
 
 **What we tried:**
 - Detailed deep-sea creatures (anglerfish, viperfish, jellyfish, dragonfish, lanternfish)
+- Anatomically accurate with teeth, photophores, fins, etc.
 - SVG filters for glow effects
-- Inline SVG with dynamic props
 
-**Learnings:**
-- Can achieve high detail (teeth, photophores, anatomical features)
-- Scales perfectly — detail visible at any size
-- SVG filters enable nice glow/blur effects
-- Works well as React components with animated props
-- For the "detailed creature" use case, works better than CSS shapes
+**Why it wasn't kept:**
+- Even with detail, the overall vibe felt off
+- Creatures were either too small to see detail, or too large and awkward
+- The composition/animation didn't come together cohesively
+- "Detailed" doesn't automatically mean "good" — the aesthetic still needs to work
+- The bioluminescent/abyssal theme in general just didn't match the project's goals
+
+**Theoretical strengths:** scalable detail, crisp at any size, works as React components
 
 ### Technologies Not Explored (Future Possibilities)
 
@@ -141,19 +133,22 @@ This project served as an exploration of different web technologies for visual e
 |-----------|-----------------|-------|
 | **Janky Code Art** | CSS | Embraces limitations as features |
 | **Bioluminescent/Abyssal** | Canvas + SVG | Needs smooth glow + detail |
-| **ASCII/Terminal** | CSS/DOM | Green-on-black, scanlines — pure CSS works |
+| **ASCII/Terminal** | CSS/DOM | Tried it, just wasn't the right vibe for this project |
 | **Dreamcore/Weirdcore** | CSS + images | Surreal compositions possible with transforms |
 | **Glitch** | CSS + Canvas | RGB split, scanlines achievable in CSS |
 
 ### Key Insight
 
-**Match the technology to the aesthetic goal:**
-- If you *want* things to look slightly off → CSS is perfect
-- If you *want* smooth, atmospheric effects → Canvas 2D
-- If you *want* detailed illustrations → SVG
-- If you *want* photorealism → WebGL/Three.js
+**Technology capability ≠ good output.**
 
-The "janky code art" aesthetic that works in this project is specifically enabled by CSS limitations. Trying to achieve polished, realistic effects with CSS will always fall short — but that shortfall can be a feature if framed correctly.
+Canvas 2D and SVG are technically capable tools, but capability alone doesn't guarantee results that match your vision. We tried both and the output simply didn't land — not because the technology failed, but because:
+- The aesthetic direction (bioluminescent/abyssal) didn't fit this project
+- Technical capability doesn't replace artistic coherence
+- "More realistic" or "more detailed" isn't always better
+
+**What actually worked:** CSS with its inherent limitations. The "janky code art" aesthetic succeeds *because* of CSS constraints, not despite them. The uncanny valley effect of CSS-rendered creatures and shapes serves the creepy-cute vibe in ways that more capable technologies didn't.
+
+**Lesson:** Start with the feeling you want, then find the technology whose limitations serve that feeling — rather than picking the most capable technology and hoping it produces good results.
 
 ---
 
