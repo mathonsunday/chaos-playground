@@ -11,15 +11,19 @@ export default function ThePet() {
   const [blink, setBlink] = useState(false);
   const [showHearts, setShowHearts] = useState(false);
   const animationRef = useRef<number>(0);
+  
+  // Debug override
+  const [debugVisits, setDebugVisits] = useState<number | null>(null);
+  const effectiveVisits = debugVisits !== null ? debugVisits : petVisits;
 
   // Familiarity level based on visits (DEBUG: compressed scale for testing)
   const familiarity = useMemo(() => {
-    if (petVisits <= 1) return 'stranger';
-    if (petVisits === 2) return 'curious';
-    if (petVisits === 3) return 'familiar';
-    if (petVisits === 4) return 'friend';
+    if (effectiveVisits <= 1) return 'stranger';
+    if (effectiveVisits === 2) return 'curious';
+    if (effectiveVisits === 3) return 'familiar';
+    if (effectiveVisits === 4) return 'friend';
     return 'bonded'; // 5+
-  }, [petVisits]);
+  }, [effectiveVisits]);
 
   // Fixed position - creature stays in center
   const creatureX = window.innerWidth / 2;
@@ -490,8 +494,41 @@ export default function ThePet() {
       
       <div className="pet-label bonded-label">
         {statusMessage}
-        <span className="visit-count">(visit {petVisits})</span>
+        <span className="visit-count">(visit {effectiveVisits})</span>
       </div>
+      
+      {/* Debug Panel */}
+      <div className="debug-panel">
+        <div className="debug-title">Debug Controls</div>
+        <div className="debug-row">
+          <span>Visits:</span>
+          <button 
+            className={debugVisits === 1 ? 'active' : ''} 
+            onClick={() => setDebugVisits(debugVisits === 1 ? null : 1)}
+          >1</button>
+          <button 
+            className={debugVisits === 2 ? 'active' : ''} 
+            onClick={() => setDebugVisits(debugVisits === 2 ? null : 2)}
+          >2</button>
+          <button 
+            className={debugVisits === 3 ? 'active' : ''} 
+            onClick={() => setDebugVisits(debugVisits === 3 ? null : 3)}
+          >3</button>
+          <button 
+            className={debugVisits === 4 ? 'active' : ''} 
+            onClick={() => setDebugVisits(debugVisits === 4 ? null : 4)}
+          >4</button>
+          <button 
+            className={debugVisits === 5 ? 'active' : ''} 
+            onClick={() => setDebugVisits(debugVisits === 5 ? null : 5)}
+          >5+</button>
+          <button 
+            className={debugVisits === null ? 'active' : ''} 
+            onClick={() => setDebugVisits(null)}
+          >REAL</button>
+        </div>
+      </div>
+      
       <button onClick={handleReset} className="debug-reset">Reset Data</button>
     </div>
   );
