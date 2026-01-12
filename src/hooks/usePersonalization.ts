@@ -161,6 +161,4 @@ export const roomDisplayNames: Record<string, string> = {
   'aquarium': 'the Aquarium',
   'forest': 'the Forest',
   'pet': 'the Creature',
-  'console': 'the Console',
-  'lure': 'the Lure',
 };

@@ -50,20 +50,6 @@ const rooms: RoomCard[] = [
     color: '#b8a0c8',
     glow: 'rgba(184, 160, 200, 0.4)',
   },
-  {
-    id: 'console',
-    title: 'The Console',
-    description: 'A terminal that knows too much. It sees your cursor.',
-    color: '#00ff00',
-    glow: 'rgba(0, 255, 0, 0.4)',
-  },
-  {
-    id: 'lure',
-    title: 'The Lure',
-    description: 'You are the light. They are drawn to you.',
-    color: '#4af',
-    glow: 'rgba(68, 170, 255, 0.4)',
-  },
 ];
 
 export default function Hub({ onSelectRoom }: HubProps) {

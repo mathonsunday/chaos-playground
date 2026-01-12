@@ -5,11 +5,9 @@ import Portrait from './rooms/Portrait/Portrait';
 import Aquarium from './rooms/Aquarium/Aquarium';
 import Forest from './rooms/Forest/Forest';
 import ThePet from './rooms/ThePet/ThePet';
-import TheConsole from './rooms/TheConsole/TheConsole';
-import TheLure from './rooms/TheLure/TheLure';
 import { PersonalizationProvider, usePersonalizationContext } from './context/PersonalizationContext';
 
-export type Room = 'hub' | 'typography' | 'portrait' | 'aquarium' | 'forest' | 'pet' | 'console' | 'lure';
+export type Room = 'hub' | 'typography' | 'portrait' | 'aquarium' | 'forest' | 'pet';
 
 function AppContent() {
   const [currentRoom, setCurrentRoom] = useState<Room>('hub');
@@ -82,20 +80,6 @@ function AppContent() {
           <>
             <BackButton />
             <ThePet />
-          </>
-        );
-      case 'console':
-        return (
-          <>
-            <BackButton />
-            <TheConsole />
-          </>
-        );
-      case 'lure':
-        return (
-          <>
-            <BackButton />
-            <TheLure />
           </>
         );
       default:
