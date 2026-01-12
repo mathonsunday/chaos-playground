@@ -50,16 +50,47 @@ export default function TheAbyss() {
     
     const initialCreatures: Creature[] = Array.from({ length: creatureCount }, (_, i) => {
       const type = types[i % types.length];
+      
+      // Distribute creatures across depth layers
+      // First few creatures are in foreground (large, detailed)
+      // Rest are mid/background
+      let z: number;
+      let baseSize: number;
+      
+      if (i < 2) {
+        // Foreground - very close, large, detailed
+        z = 1.0;
+        baseSize = type === 'jellyfish' ? 250 : 
+                   type === 'lanternfish' ? 150 :
+                   type === 'anglerfish' ? 280 :
+                   type === 'viperfish' ? 300 :
+                   220;
+      } else if (i < 5) {
+        // Mid-ground - medium size
+        z = 0.6 + Math.random() * 0.2;
+        baseSize = type === 'jellyfish' ? 140 : 
+                   type === 'lanternfish' ? 80 :
+                   type === 'anglerfish' ? 160 :
+                   type === 'viperfish' ? 180 :
+                   120;
+      } else {
+        // Background - smaller, atmospheric
+        z = 0.3 + Math.random() * 0.2;
+        baseSize = type === 'jellyfish' ? 60 : 
+                   type === 'lanternfish' ? 35 :
+                   type === 'anglerfish' ? 70 :
+                   type === 'viperfish' ? 80 :
+                   50;
+      }
+      
       return {
         id: i,
         type,
         x: Math.random() * 100,
-        y: 10 + Math.random() * 80,
-        z: 0.5 + Math.random() * 0.5,
-        size: type === 'jellyfish' ? 80 + Math.random() * 60 : 
-              type === 'lanternfish' ? 40 + Math.random() * 30 :
-              60 + Math.random() * 50,
-        speed: 0.02 + Math.random() * 0.03,
+        y: 15 + Math.random() * 70,
+        z,
+        size: baseSize + Math.random() * (baseSize * 0.3),
+        speed: 0.015 + Math.random() * 0.025 * (1.5 - z), // Foreground moves slower
         direction: Math.random() > 0.5 ? 1 : -1,
         wobblePhase: Math.random() * Math.PI * 2,
         hue: type === 'anglerfish' ? 180 + Math.random() * 40 :
@@ -67,7 +98,7 @@ export default function TheAbyss() {
              type === 'jellyfish' ? 260 + Math.random() * 40 :
              type === 'dragonfish' ? 180 + Math.random() * 30 :
              200 + Math.random() * 30,
-        glowIntensity: 0.5 + Math.random() * 0.4,
+        glowIntensity: 0.6 + Math.random() * 0.4,
       };
     });
 
@@ -254,15 +285,18 @@ export default function TheAbyss() {
   };
 
   const renderCreature = (creature: Creature) => {
+    // Blur only for background creatures (z < 0.5)
+    const blurAmount = creature.z < 0.5 ? (0.5 - creature.z) * 4 : 0;
+    
     const style = {
       left: `${creature.x}%`,
       top: `${creature.y}%`,
       width: creature.size,
       height: 'auto',
-      transform: `translate(-50%, -50%) scaleX(${creature.direction}) scale(${creature.z})`,
-      opacity: 0.6 + creature.z * 0.4,
-      filter: `blur(${(1 - creature.z) * 2}px)`,
-      zIndex: Math.floor(creature.z * 10),
+      transform: `translate(-50%, -50%) scaleX(${creature.direction})`,
+      opacity: 0.5 + creature.z * 0.5,
+      filter: blurAmount > 0 ? `blur(${blurAmount}px)` : 'none',
+      zIndex: Math.floor(creature.z * 100),
     };
 
     switch (creature.type) {
