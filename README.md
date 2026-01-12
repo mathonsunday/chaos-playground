@@ -16,6 +16,8 @@ Interactive text that reacts chaotically to cursor presence. Words scatter, flee
 ### The Figure
 A tall, shadowy humanoid silhouette with glowing red eyes that tracks your cursor. Intentionally looks like "a kid's drawing of a spooky character." The figure grows larger and leans closer with repeated visits.
 
+Features atmospheric cool blue-grey fog that creates a retro video game aesthetic. The figure is layered in front of the fog as a stark dark silhouette with subtle gradients for depth.
+
 ### The Creature
 A "creepy-cute" creature with a single large eye and tentacle-like appendages. Remembers you across visits and progresses through relationship stages: Stranger → Curious → Familiar → Friend → Bonded. Each stage has dramatically different behaviors and animations.
 
@@ -83,6 +85,12 @@ The "janky code art" aesthetic succeeds *because* of CSS constraints, not despit
 - Can't do smooth particles or complex physics
 - Performance degrades with many animated elements
 - No good way to do dynamic lighting or atmospheric depth
+
+**Lessons learned:**
+- **z-index layering is critical** — fog/atmosphere layers must be BEHIND the main subject, not in front
+- **Contrast matters** — a dark silhouette needs a slightly lighter backdrop (fog) to be visible
+- **Color choice affects mood** — warm brown fog looked ugly; cool blue-grey fog created a pleasing retro video game aesthetic
+- **Gradients add depth** — solid black silhouettes look flat; subtle gradients (#151515 → #080808) give definition without losing the dark aesthetic
 
 ### Canvas 2D (Successfully Used in The Abyss)
 
@@ -164,6 +172,8 @@ Rooms include debug controls to test features:
 - **Time-of-day toggle** — Test morning/afternoon/evening/night modes
 - **Reset All Data** — Clear localStorage and start fresh
 - **Summon** (The Abyss) — Trigger the leviathan on demand
+
+**Implementation note:** For components with multiple render paths (like The Creature with different familiarity stages), debug panels must be included in ALL render paths, not just one. Otherwise the debug panel disappears when state changes trigger a different render path.
 
 ## 📁 Project Structure
 
