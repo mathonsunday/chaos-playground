@@ -1,6 +1,12 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { usePersonalizationContext } from '../../context/PersonalizationContext';
+import { useWaveEvolution } from '../../hooks/useWaveEvolution';
 import './Aquarium.css';
+
+interface AquariumProps {
+  /** When true, enables focus mode with wave evolution and no cursor interaction */
+  focusMode?: boolean;
+}
 
 interface Jellyfish {
   id: number;
@@ -34,9 +40,17 @@ interface Particle {
   opacity: number;
 }
 
-export default function Aquarium() {
+export default function Aquarium({ focusMode = false }: AquariumProps) {
   const { data, getTimeOfDay } = usePersonalizationContext();
   const visits = data.roomVisits['aquarium'] || 0;
+  
+  // Wave evolution for focus mode - cycles 1-8 over ~45 minutes
+  const waveEvolution = useWaveEvolution({
+    min: 1,
+    max: 8,
+    cycleDuration: 45 * 60 * 1000, // 45 minutes
+    enabled: focusMode,
+  });
   
   const [jellyfish, setJellyfish] = useState<Jellyfish[]>([]);
   const [fish, setFish] = useState<Fish[]>([]);
@@ -44,7 +58,7 @@ export default function Aquarium() {
   const [time, setTime] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   
-  // Debug overrides
+  // Debug overrides (only used when not in focus mode)
   const [debugVisits, setDebugVisits] = useState<number | null>(null);
   const [debugLateNight, setDebugLateNight] = useState<boolean | null>(null);
   
@@ -53,8 +67,14 @@ export default function Aquarium() {
   const fishRef = useRef<Fish[]>([]);
   const particlesRef = useRef<Particle[]>([]);
 
-  // Effective values
-  const effectiveVisits = debugVisits !== null ? debugVisits : visits;
+  // Effective values - use wave evolution in focus mode
+  const effectiveVisits = useMemo(() => {
+    if (focusMode) {
+      return waveEvolution.intValue;
+    }
+    return debugVisits !== null ? debugVisits : visits;
+  }, [focusMode, waveEvolution.intValue, debugVisits, visits]);
+  
   const isLateNight = debugLateNight !== null ? debugLateNight : getTimeOfDay() === 'late';
 
   // Creature counts scale with visits
@@ -64,11 +84,12 @@ export default function Aquarium() {
   // Rare creature appears after 5+ visits
   const showRareCreature = effectiveVisits >= 5;
   
-  // Fish attraction to cursor increases with visits
+  // Fish attraction to cursor - DISABLED in focus mode for pure passive viewing
   const cursorAttraction = useMemo(() => {
+    if (focusMode) return 0; // No cursor interaction in focus mode
     if (effectiveVisits <= 1) return 0;
     return Math.min(1, effectiveVisits * 0.15);
-  }, [effectiveVisits]);
+  }, [focusMode, effectiveVisits]);
 
   // Status message
   const statusMessage = useMemo(() => {
@@ -219,8 +240,10 @@ export default function Aquarium() {
     return () => cancelAnimationFrame(animationRef.current);
   }, [animate]);
 
-  // Light rays follow mouse slightly
-  const lightX = 50 + (mousePos.x / window.innerWidth - 0.5) * 20;
+  // Light rays follow mouse slightly (but not in focus mode)
+  const lightX = focusMode 
+    ? 50 + Math.sin(time * 0.1) * 10 // Gentle automatic drift in focus mode
+    : 50 + (mousePos.x / window.innerWidth - 0.5) * 20;
 
   // Debug reset
   const handleReset = () => {
@@ -229,7 +252,7 @@ export default function Aquarium() {
   };
 
   return (
-    <div className={`aquarium-room ${isLateNight ? 'late-night' : ''}`}>
+    <div className={`aquarium-room ${isLateNight ? 'late-night' : ''} ${focusMode ? 'focus-mode' : ''}`}>
       {/* Deep water gradient */}
       <div className="water-depth" />
       

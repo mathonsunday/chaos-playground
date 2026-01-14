@@ -1,6 +1,10 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import './TheAbyss.css';
 
+interface TheAbyssProps {
+  focusMode?: boolean;
+}
+
 interface Seeker {
   x: number;
   y: number;
@@ -36,12 +40,18 @@ interface Leviathan {
   direction: number;
 }
 
-export default function TheAbyss() {
+export default function TheAbyss({ focusMode = false }: TheAbyssProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>(0);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const lastMouseRef = useRef({ x: -1000, y: -1000 });
   const mouseSpeedRef = useRef(0);
+  const focusModeRef = useRef(focusMode);
+  
+  // Keep focusMode ref updated
+  useEffect(() => {
+    focusModeRef.current = focusMode;
+  }, [focusMode]);
   
   const seekersRef = useRef<Seeker[]>([]);
   const tendrilsRef = useRef<Tendril[]>([]);
@@ -124,11 +134,20 @@ export default function TheAbyss() {
 
     const { width, height } = canvas;
     const time = timeRef.current;
-    const mouse = mouseRef.current;
-    const mouseSpeed = mouseSpeedRef.current;
     
-    // Decay mouse speed
-    mouseSpeedRef.current *= 0.9;
+    // In focus mode, light moves automatically in a slow, wandering pattern
+    const mouse = focusModeRef.current 
+      ? {
+          x: width / 2 + Math.sin(time * 0.0003) * width * 0.3 + Math.sin(time * 0.0007) * width * 0.1,
+          y: height / 2 + Math.cos(time * 0.0004) * height * 0.25 + Math.cos(time * 0.0006) * height * 0.1,
+        }
+      : mouseRef.current;
+    const mouseSpeed = focusModeRef.current ? 0.5 : mouseSpeedRef.current; // Gentle constant speed in focus mode
+    
+    // Decay mouse speed (only when not in focus mode)
+    if (!focusModeRef.current) {
+      mouseSpeedRef.current *= 0.9;
+    }
 
     // Pure black
     ctx.fillStyle = '#000';
@@ -578,12 +597,14 @@ export default function TheAbyss() {
   };
 
   return (
-    <div className="abyss-room">
+    <div className={`abyss-room ${focusMode ? 'focus-mode' : ''}`}>
       <canvas ref={canvasRef} className="abyss-canvas" />
-      {message && <div className="abyss-message">{message}</div>}
-      <button onClick={triggerLeviathan} className="debug-trigger">
-        Summon
-      </button>
+      {message && !focusMode && <div className="abyss-message">{message}</div>}
+      {!focusMode && (
+        <button onClick={triggerLeviathan} className="debug-trigger">
+          Summon
+        </button>
+      )}
     </div>
   );
 }

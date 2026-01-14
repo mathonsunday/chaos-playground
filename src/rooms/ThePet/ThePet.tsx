@@ -1,10 +1,23 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { usePersonalizationContext } from '../../context/PersonalizationContext';
+import { useWaveEvolution } from '../../hooks/useWaveEvolution';
 import './ThePet.css';
 
-export default function ThePet() {
+interface ThePetProps {
+  focusMode?: boolean;
+}
+
+export default function ThePet({ focusMode = false }: ThePetProps) {
   const { data } = usePersonalizationContext();
   const petVisits = data.roomVisits['pet'] || 0;
+  
+  // Wave evolution for focus mode
+  const waveEvolution = useWaveEvolution({
+    min: 1,
+    max: 5,
+    cycleDuration: 45 * 60 * 1000,
+    enabled: focusMode,
+  });
   
   const [mousePos, setMousePos] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const [time, setTime] = useState(0);
@@ -12,9 +25,12 @@ export default function ThePet() {
   const [showHearts, setShowHearts] = useState(false);
   const animationRef = useRef<number>(0);
   
-  // Debug override
+  // Debug override (only used when not in focus mode)
   const [debugVisits, setDebugVisits] = useState<number | null>(null);
-  const effectiveVisits = debugVisits !== null ? debugVisits : petVisits;
+  const effectiveVisits = useMemo(() => {
+    if (focusMode) return waveEvolution.intValue;
+    return debugVisits !== null ? debugVisits : petVisits;
+  }, [focusMode, waveEvolution.intValue, debugVisits, petVisits]);
 
   // Familiarity level based on visits (DEBUG: compressed scale for testing)
   const familiarity = useMemo(() => {
@@ -103,7 +119,7 @@ export default function ThePet() {
     const gentleFloat = Math.sin(time * 0.8) * 3;
     
     return (
-      <div className="pet-room familiarity-stranger">
+      <div className={`pet-room familiarity-stranger ${focusMode ? 'focus-mode' : ''}`}>
         <div 
           className="creature stranger"
           style={{
@@ -166,7 +182,7 @@ export default function ThePet() {
     const gentleFloat = Math.sin(time) * 5;
     
     return (
-      <div className="pet-room familiarity-curious">
+      <div className={`pet-room familiarity-curious ${focusMode ? 'focus-mode' : ''}`}>
         <div 
           className="creature curious"
           style={{
@@ -263,7 +279,7 @@ export default function ThePet() {
     const tailWag = Math.sin(time * 2) * 12;
     
     return (
-      <div className="pet-room familiarity-familiar">
+      <div className={`pet-room familiarity-familiar ${focusMode ? 'focus-mode' : ''}`}>
         <div className="ambient-glow" style={{ left: creatureX, top: creatureY }} />
         
         <div 
@@ -365,7 +381,7 @@ export default function ThePet() {
     const earBounce = Math.sin(time * 3) * 15;
     
     return (
-      <div className="pet-room familiarity-friend">
+      <div className={`pet-room familiarity-friend ${focusMode ? 'focus-mode' : ''}`}>
         <div className="ambient-glow bright" style={{ left: creatureX, top: creatureY }} />
         
         {/* Sparkles */}
@@ -484,7 +500,7 @@ export default function ThePet() {
   const armDance = Math.sin(time * 4);
   
   return (
-    <div className="pet-room familiarity-bonded">
+    <div className={`pet-room familiarity-bonded ${focusMode ? 'focus-mode' : ''}`}>
       <div className="ambient-glow huge" style={{ left: creatureX, top: creatureY }} />
       
       {/* Hearts floating up */}

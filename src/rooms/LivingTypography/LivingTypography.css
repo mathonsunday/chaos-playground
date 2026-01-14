@@ -4,6 +4,9 @@
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  /* Ensure mouse events work */
+  pointer-events: auto;
+  cursor: default;
 }
 
 .floating-letter {
@@ -101,5 +104,28 @@
   50% {
     opacity: 0.8;
     transform: scale(1.1);
+  }
+}
+
+/* ========== FOCUS MODE - Hide all UI ========== */
+.typography-room.focus-mode .typography-instructions,
+.typography-room.focus-mode .input-echo {
+  display: none !important;
+}
+
+.typography-room.focus-mode {
+  cursor: none;
+}
+
+.typography-room.focus-mode:hover {
+  cursor: default;
+}
+
+/* Ensure mobile overflow doesn't interfere */
+@media (max-width: 768px) {
+  .typography-room {
+    overflow: hidden !important;
+    height: 100vh !important;
+    width: 100vw !important;
   }
 }

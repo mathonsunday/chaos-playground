@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { usePersonalizationContext, roomDisplayNames } from '../../context/PersonalizationContext';
 import './LivingTypography.css';
 
+interface LivingTypographyProps {
+  focusMode?: boolean;
+}
+
 interface Letter {
   id: number;
   char: string;
@@ -18,7 +22,7 @@ interface Letter {
   wordGroup: number;
 }
 
-export default function LivingTypography() {
+export default function LivingTypography({ focusMode = false }: LivingTypographyProps) {
   const { data, getTimeOfDay, getFavoriteRoom, formatTime, getDaysSinceFirst } = usePersonalizationContext();
   
   const [letters, setLetters] = useState<Letter[]>([]);
@@ -166,12 +170,12 @@ export default function LivingTypography() {
     const updated = lettersRef.current.map((letter) => {
       let { x, y, vx, vy, targetX, targetY, rotation, hue, isScattering, scale } = letter;
 
-      // Check distance from mouse
+      // Check distance from mouse (disabled in focus mode)
       const dx = x - mouse.x;
       const dy = y - mouse.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      if (dist < scatterRadius) {
+      if (!focusMode && dist < scatterRadius) {
         // Scatter away from mouse with force
         const force = (scatterRadius - dist) / scatterRadius;
         const angle = Math.atan2(dy, dx);
@@ -224,7 +228,7 @@ export default function LivingTypography() {
     lettersRef.current = updated;
     setLetters([...updated]);
     animationRef.current = requestAnimationFrame(animate);
-  }, []);
+  }, [focusMode]);
 
   useEffect(() => {
     animationRef.current = requestAnimationFrame(animate);
@@ -269,7 +273,7 @@ export default function LivingTypography() {
   }, [handleKeyDown]);
 
   return (
-    <div className="typography-room">
+    <div className={`typography-room ${focusMode ? 'focus-mode' : ''}`}>
       {letters.map((letter) => (
         <span
           key={letter.id}
@@ -288,15 +292,17 @@ export default function LivingTypography() {
         </span>
       ))}
 
-      {inputText && (
+      {inputText && !focusMode && (
         <div className="input-echo">
           {inputText}
         </div>
       )}
 
-      <div className="typography-instructions">
-        Move mouse to scatter • Type to add letters
-      </div>
+      {!focusMode && (
+        <div className="typography-instructions">
+          Move mouse to scatter • Type to add letters
+        </div>
+      )}
     </div>
   );
 }

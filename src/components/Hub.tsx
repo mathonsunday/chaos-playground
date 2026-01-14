@@ -4,6 +4,7 @@ import './Hub.css';
 
 interface HubProps {
   onSelectRoom: (room: Room) => void;
+  onEnterFocusMode: (room: Room) => void;
 }
 
 interface RoomCard {
@@ -59,7 +60,7 @@ const rooms: RoomCard[] = [
   },
 ];
 
-export default function Hub({ onSelectRoom }: HubProps) {
+export default function Hub({ onSelectRoom, onEnterFocusMode }: HubProps) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -138,10 +139,9 @@ export default function Hub({ onSelectRoom }: HubProps) {
 
         <div className="room-grid">
           {rooms.map((room, index) => (
-            <button
+            <div
               key={room.id}
               className={`room-card ${hoveredCard === room.id ? 'hovered' : ''}`}
-              onClick={() => onSelectRoom(room.id)}
               onMouseEnter={() => setHoveredCard(room.id)}
               onMouseLeave={() => setHoveredCard(null)}
               style={{
@@ -150,15 +150,31 @@ export default function Hub({ onSelectRoom }: HubProps) {
                 '--card-glow': room.glow,
               } as unknown as React.CSSProperties}
             >
-              <div className="card-inner">
-                <div className="card-preview">
-                  <div className="preview-animation" />
+              <button
+                className="card-main-button"
+                onClick={() => onSelectRoom(room.id)}
+              >
+                <div className="card-inner">
+                  <div className="card-preview">
+                    <div className="preview-animation" />
+                  </div>
+                  <h2 className="card-title">{room.title}</h2>
+                  <p className="card-description">{room.description}</p>
                 </div>
-                <h2 className="card-title">{room.title}</h2>
-                <p className="card-description">{room.description}</p>
-              </div>
+              </button>
+              <button
+                className="focus-mode-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEnterFocusMode(room.id);
+                }}
+                title="Enter Focus Mode"
+              >
+                <span className="focus-icon">◉</span>
+                <span className="focus-label">Focus</span>
+              </button>
               <div className="card-glow" />
-            </button>
+            </div>
           ))}
         </div>
       </div>

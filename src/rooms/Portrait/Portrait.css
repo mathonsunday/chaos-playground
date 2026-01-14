@@ -420,4 +420,99 @@
 .debug-reset:hover {
   background: rgba(255, 100, 100, 0.25);
 }
+
+/* ========== FOCUS MODE - Hide all UI ========== */
+.portrait-room.focus-mode .portrait-stats,
+.portrait-room.focus-mode .portrait-label,
+.portrait-room.focus-mode .debug-panel,
+.portrait-room.focus-mode .debug-reset {
+  display: none !important;
+}
+
+.portrait-room.focus-mode {
+  cursor: none;
+}
+
+.portrait-room.focus-mode:hover {
+  cursor: default;
+}
+
+/* Mobile-friendly adjustments */
+@media (max-width: 768px) {
+  .portrait-stats {
+    top: max(70px, calc(env(safe-area-inset-top, 0px) + 60px));
+    left: max(10px, env(safe-area-inset-left, 10px));
+    font-size: 10px;
+    gap: 3px;
+  }
+  
+  .portrait-label {
+    bottom: max(60px, calc(env(safe-area-inset-bottom, 0px) + 50px));
+    font-size: 12px;
+    padding: 0 10px;
+    max-width: 90%;
+  }
+  
+  .debug-panel {
+    bottom: max(20px, calc(env(safe-area-inset-bottom, 0px) + 20px));
+    right: max(10px, env(safe-area-inset-right, 10px));
+    left: max(10px, env(safe-area-inset-left, 10px));
+    max-width: calc(100% - 20px);
+    font-size: 10px;
+    padding: 10px;
+  }
+  
+  .debug-row {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .debug-row button {
+    min-height: 36px;
+    min-width: 36px;
+    padding: 6px 10px;
+    font-size: 9px;
+  }
+  
+  .debug-reset {
+    bottom: max(20px, calc(env(safe-area-inset-bottom, 0px) + 20px));
+    left: max(10px, env(safe-area-inset-left, 10px));
+    padding: 10px 14px;
+    font-size: 10px;
+    min-height: 44px;
+    min-width: 100px;
+  }
+  
+  .the-figure {
+    width: 200px;
+    height: 350px;
+  }
+  
+  .figure-shadow {
+    width: 300px;
+    height: 400px;
+    top: -20px;
+    left: -50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .portrait-stats {
+    font-size: 9px;
+  }
+  
+  .portrait-label {
+    font-size: 11px;
+  }
+  
+  .debug-panel {
+    font-size: 9px;
+    padding: 8px;
+  }
+  
+  .debug-reset {
+    font-size: 9px;
+    padding: 8px 12px;
+  }
+}
 /* Force rebuild Mon Jan 12 00:59:46 PST 2026 */

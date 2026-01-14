@@ -55,3 +55,41 @@
   color: rgba(220, 120, 120, 0.9);
   border-color: rgba(160, 80, 80, 0.6);
 }
+
+/* ========== FOCUS MODE ========== */
+.abyss-room.focus-mode .debug-trigger,
+.abyss-room.focus-mode .abyss-message {
+  display: none !important;
+}
+
+/* Mobile-friendly adjustments */
+@media (max-width: 768px) {
+  .abyss-message {
+    bottom: max(50px, calc(env(safe-area-inset-bottom, 0px) + 40px));
+    font-size: 12px;
+    padding: 0 10px;
+    max-width: 90%;
+    letter-spacing: 2px;
+  }
+  
+  .debug-trigger {
+    bottom: max(20px, calc(env(safe-area-inset-bottom, 0px) + 20px));
+    left: max(10px, env(safe-area-inset-left, 10px));
+    padding: 10px 14px;
+    font-size: 11px;
+    min-height: 44px;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .abyss-message {
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  
+  .debug-trigger {
+    font-size: 10px;
+    padding: 8px 12px;
+  }
+}

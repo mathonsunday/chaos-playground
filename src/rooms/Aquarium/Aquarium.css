@@ -632,3 +632,88 @@
 .debug-reset:hover {
   background: rgba(255, 100, 100, 0.25) !important;
 }
+
+/* ========== FOCUS MODE - Hide all UI ========== */
+.aquarium-room.focus-mode .aquarium-stats,
+.aquarium-room.focus-mode .aquarium-label,
+.aquarium-room.focus-mode .debug-panel,
+.aquarium-room.focus-mode .debug-reset {
+  display: none !important;
+}
+
+/* Ensure full immersion in focus mode */
+.aquarium-room.focus-mode {
+  cursor: none;
+}
+
+/* Restore cursor on mouse movement (handled via JS timeout if needed) */
+.aquarium-room.focus-mode:hover {
+  cursor: default;
+}
+
+/* Mobile-friendly adjustments */
+@media (max-width: 768px) {
+  .aquarium-stats {
+    top: max(70px, calc(env(safe-area-inset-top, 0px) + 60px));
+    left: max(10px, env(safe-area-inset-left, 10px));
+    font-size: 10px;
+    gap: 3px;
+  }
+  
+  .aquarium-label {
+    bottom: max(60px, calc(env(safe-area-inset-bottom, 0px) + 50px));
+    font-size: 12px;
+    padding: 0 10px;
+    max-width: 90%;
+  }
+  
+  .debug-panel {
+    bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) + 10px));
+    right: max(10px, env(safe-area-inset-right, 10px));
+    left: max(10px, env(safe-area-inset-left, 10px));
+    max-width: calc(100% - 20px);
+    font-size: 10px;
+    padding: 10px;
+  }
+  
+  .debug-row {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .debug-row button {
+    min-height: 36px;
+    min-width: 36px;
+    padding: 6px 10px;
+    font-size: 9px;
+  }
+  
+  .debug-reset {
+    bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) + 10px)) !important;
+    left: max(10px, env(safe-area-inset-left, 10px)) !important;
+    padding: 10px 14px !important;
+    font-size: 10px !important;
+    min-height: 44px !important;
+    min-width: 100px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .aquarium-stats {
+    font-size: 9px;
+  }
+  
+  .aquarium-label {
+    font-size: 11px;
+  }
+  
+  .debug-panel {
+    font-size: 9px;
+    padding: 8px;
+  }
+  
+  .debug-reset {
+    font-size: 9px !important;
+    padding: 8px 12px !important;
+  }
+}

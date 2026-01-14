@@ -1,24 +1,40 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { usePersonalizationContext, roomDisplayNames } from '../../context/PersonalizationContext';
+import { useWaveEvolution } from '../../hooks/useWaveEvolution';
 import './Portrait.css';
 
-export default function Portrait() {
+interface PortraitProps {
+  focusMode?: boolean;
+}
+
+export default function Portrait({ focusMode = false }: PortraitProps) {
   const { data, getTimeOfDay, getFavoriteRoom } = usePersonalizationContext();
   const visits = data.roomVisits['portrait'] || 0;
+  
+  // Wave evolution for focus mode
+  const waveEvolution = useWaveEvolution({
+    min: 1,
+    max: 10,
+    cycleDuration: 45 * 60 * 1000,
+    enabled: focusMode,
+  });
   
   const [mousePos, setMousePos] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const [time, setTime] = useState(0);
   const [flicker, setFlicker] = useState(1);
   const [armReach, setArmReach] = useState(0);
   
-  // Debug overrides
+  // Debug overrides (only used when not in focus mode)
   const [debugVisits, setDebugVisits] = useState<number | null>(null);
   const [debugLateNight, setDebugLateNight] = useState<boolean | null>(null);
   
   const animationRef = useRef<number>(0);
 
-  // Effective values
-  const effectiveVisits = debugVisits !== null ? debugVisits : visits;
+  // Effective values - use wave evolution in focus mode
+  const effectiveVisits = useMemo(() => {
+    if (focusMode) return waveEvolution.intValue;
+    return debugVisits !== null ? debugVisits : visits;
+  }, [focusMode, waveEvolution.intValue, debugVisits, visits]);
   const isLateNight = debugLateNight !== null ? debugLateNight : getTimeOfDay() === 'late';
   const favorite = getFavoriteRoom();
 
@@ -107,7 +123,7 @@ export default function Portrait() {
   };
 
   return (
-    <div className={`portrait-room ${isLateNight ? 'late-night' : ''}`}>
+    <div className={`portrait-room ${isLateNight ? 'late-night' : ''} ${focusMode ? 'focus-mode' : ''}`}>
       {/* Subtle atmospheric fog */}
       <div className="fog-layer fog-1" />
       <div className="fog-layer fog-2" />

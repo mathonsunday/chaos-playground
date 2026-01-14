@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { usePersonalizationContext } from '../../context/PersonalizationContext';
+import { useWaveEvolution } from '../../hooks/useWaveEvolution';
 import './Forest.css';
+
+interface ForestProps {
+  focusMode?: boolean;
+}
 
 interface Tree {
   id: number;
@@ -52,15 +57,26 @@ interface Owl {
 
 type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 
-export default function Forest() {
+export default function Forest({ focusMode = false }: ForestProps) {
   const { data } = usePersonalizationContext();
   const visits = data.roomVisits['forest'] || 0;
   
-  // Debug overrides
+  // Wave evolution for focus mode
+  const waveEvolution = useWaveEvolution({
+    min: 1,
+    max: 8,
+    cycleDuration: 45 * 60 * 1000,
+    enabled: focusMode,
+  });
+  
+  // Debug overrides (only used when not in focus mode)
   const [debugVisits, setDebugVisits] = useState<number | null>(null);
   const [debugTimeOfDay, setDebugTimeOfDay] = useState<TimeOfDay | null>(null);
 
-  const effectiveVisits = debugVisits !== null ? debugVisits : visits;
+  const effectiveVisits = useMemo(() => {
+    if (focusMode) return waveEvolution.intValue;
+    return debugVisits !== null ? debugVisits : visits;
+  }, [focusMode, waveEvolution.intValue, debugVisits, visits]);
   
   // Determine time of day
   const actualTimeOfDay = useMemo((): TimeOfDay => {
@@ -230,7 +246,7 @@ export default function Forest() {
   };
 
   return (
-    <div className={`forest-room time-${timeOfDay}`}>
+    <div className={`forest-room time-${timeOfDay} ${focusMode ? 'focus-mode' : ''}`}>
       {/* Sky gradient */}
       <div className="sky" />
       
@@ -277,8 +293,8 @@ export default function Forest() {
             mousePos.y - eye.y,
             mousePos.x - eye.x
           );
-          // Eyes follow cursor more intensely for regulars
-          const followIntensity = 2 + effectiveVisits * 0.5;
+          // Eyes follow cursor more intensely for regulars (disabled in focus mode)
+          const followIntensity = focusMode ? 0 : 2 + effectiveVisits * 0.5;
           return (
             <div
               key={eye.id}
@@ -302,8 +318,8 @@ export default function Forest() {
 
       {/* Owls - only after 5 visits */}
       {showOwls && owls.map(owl => {
-        const lookAngle = Math.atan2(mousePos.y - owl.y, mousePos.x - owl.x);
-        const headTurn = Math.cos(lookAngle) * 30;
+        const lookAngle = focusMode ? 0 : Math.atan2(mousePos.y - owl.y, mousePos.x - owl.x);
+        const headTurn = focusMode ? 0 : Math.cos(lookAngle) * 30;
         
         return (
           <div
