@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { usePersonalizationContext } from '../../context/PersonalizationContext';
-import { useWaveEvolution } from '../../hooks/useWaveEvolution';
+import { useDebugOverrides } from '../../hooks/useDebugOverrides';
+import { useResetData } from '../../hooks/useResetData';
 import './Forest.css';
 
 interface ForestProps {
@@ -60,23 +61,20 @@ type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 export default function Forest({ focusMode = false }: ForestProps) {
   const { data } = usePersonalizationContext();
   const visits = data.roomVisits['forest'] || 0;
-  
-  // Wave evolution for focus mode
-  const waveEvolution = useWaveEvolution({
-    min: 1,
-    max: 8,
-    cycleDuration: 45 * 60 * 1000,
-    enabled: focusMode,
-  });
-  
-  // Debug overrides (only used when not in focus mode)
-  const [debugVisits, setDebugVisits] = useState<number | null>(null);
-  const [debugTimeOfDay, setDebugTimeOfDay] = useState<TimeOfDay | null>(null);
 
-  const effectiveVisits = useMemo(() => {
-    if (focusMode) return waveEvolution.intValue;
-    return debugVisits !== null ? debugVisits : visits;
-  }, [focusMode, waveEvolution.intValue, debugVisits, visits]);
+  const { effectiveValue: effectiveVisits, debugOverride: debugVisits, setDebugOverride: setDebugVisits } = useDebugOverrides({
+    focusMode,
+    actualValue: visits,
+    waveEvolutionConfig: {
+      min: 1,
+      max: 8,
+      cycleDuration: 45 * 60 * 1000,
+    },
+  });
+
+  // Debug overrides for time of day (custom to Forest room)
+  const [debugTimeOfDay, setDebugTimeOfDay] = useState<TimeOfDay | null>(null);
+  const handleReset = useResetData();
   
   // Determine time of day
   const actualTimeOfDay = useMemo((): TimeOfDay => {
@@ -240,10 +238,6 @@ export default function Forest({ focusMode = false }: ForestProps) {
     return () => cancelAnimationFrame(animationRef.current);
   }, [animate]);
 
-  const handleReset = () => {
-    localStorage.removeItem('chaos-playground-data');
-    window.location.reload();
-  };
 
   return (
     <div className={`forest-room time-${timeOfDay} ${focusMode ? 'focus-mode' : ''}`}>

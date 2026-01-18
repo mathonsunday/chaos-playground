@@ -122,12 +122,6 @@ export function usePersonalization() {
     return rooms.reduce((a, b) => (a[1] > b[1] ? a : b))[0];
   }, [data.roomVisits]);
 
-  const getMostTimeRoom = useCallback(() => {
-    const rooms = Object.entries(data.roomTimeSpent);
-    if (rooms.length === 0) return null;
-    return rooms.reduce((a, b) => (a[1] > b[1] ? a : b))[0];
-  }, [data.roomTimeSpent]);
-
   const formatTime = useCallback((seconds: number) => {
     if (seconds < 60) return `${seconds} seconds`;
     if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes`;
@@ -147,7 +141,6 @@ export function usePersonalization() {
     leaveRoom,
     getTimeOfDay,
     getFavoriteRoom,
-    getMostTimeRoom,
     formatTime,
     getDaysSinceFirst,
   };

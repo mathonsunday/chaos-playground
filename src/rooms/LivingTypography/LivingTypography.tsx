@@ -23,7 +23,7 @@ interface Letter {
 }
 
 export default function LivingTypography({ focusMode = false }: LivingTypographyProps) {
-  const { data, getTimeOfDay, getFavoriteRoom, formatTime, getDaysSinceFirst } = usePersonalizationContext();
+  const { data, getTimeOfDay, getFavoriteRoom, getDaysSinceFirst } = usePersonalizationContext();
   
   const [letters, setLetters] = useState<Letter[]>([]);
   const [inputText, setInputText] = useState('');
@@ -87,7 +87,7 @@ export default function LivingTypography({ focusMode = false }: LivingTypography
     if (days > 0) phrases.push(`${days}`, 'DAYS');
 
     return phrases;
-  }, [data, getTimeOfDay, getFavoriteRoom, formatTime, getDaysSinceFirst]);
+  }, [data, getTimeOfDay, getFavoriteRoom, getDaysSinceFirst]);
 
   // Spawn a word at a random position
   const spawnWord = useCallback((word: string) => {

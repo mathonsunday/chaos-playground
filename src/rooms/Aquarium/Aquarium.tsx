@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { usePersonalizationContext } from '../../context/PersonalizationContext';
-import { useWaveEvolution } from '../../hooks/useWaveEvolution';
+import { useDebugOverrides } from '../../hooks/useDebugOverrides';
+import { useResetData } from '../../hooks/useResetData';
+import { DebugPanel } from '../../components/DebugPanel';
 import './Aquarium.css';
 
 interface AquariumProps {
@@ -43,38 +45,29 @@ interface Particle {
 export default function Aquarium({ focusMode = false }: AquariumProps) {
   const { data, getTimeOfDay } = usePersonalizationContext();
   const visits = data.roomVisits['aquarium'] || 0;
-  
-  // Wave evolution for focus mode - cycles 1-8 over ~45 minutes
-  const waveEvolution = useWaveEvolution({
-    min: 1,
-    max: 8,
-    cycleDuration: 45 * 60 * 1000, // 45 minutes
-    enabled: focusMode,
+
+  const { effectiveValue: effectiveVisits, debugOverride: debugVisits, setDebugOverride: setDebugVisits, debugLateNight, setDebugLateNight } = useDebugOverrides({
+    focusMode,
+    actualValue: visits,
+    waveEvolutionConfig: {
+      min: 1,
+      max: 8,
+      cycleDuration: 45 * 60 * 1000,
+    },
   });
-  
+
   const [jellyfish, setJellyfish] = useState<Jellyfish[]>([]);
   const [fish, setFish] = useState<Fish[]>([]);
   const [particles, setParticles] = useState<Particle[]>([]);
   const [time, setTime] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  
-  // Debug overrides (only used when not in focus mode)
-  const [debugVisits, setDebugVisits] = useState<number | null>(null);
-  const [debugLateNight, setDebugLateNight] = useState<boolean | null>(null);
-  
+
   const animationRef = useRef<number>(0);
   const jellyfishRef = useRef<Jellyfish[]>([]);
   const fishRef = useRef<Fish[]>([]);
   const particlesRef = useRef<Particle[]>([]);
 
-  // Effective values - use wave evolution in focus mode
-  const effectiveVisits = useMemo(() => {
-    if (focusMode) {
-      return waveEvolution.intValue;
-    }
-    return debugVisits !== null ? debugVisits : visits;
-  }, [focusMode, waveEvolution.intValue, debugVisits, visits]);
-  
+  const handleReset = useResetData();
   const isLateNight = debugLateNight !== null ? debugLateNight : getTimeOfDay() === 'late';
 
   // Creature counts scale with visits
@@ -241,15 +234,9 @@ export default function Aquarium({ focusMode = false }: AquariumProps) {
   }, [animate]);
 
   // Light rays follow mouse slightly (but not in focus mode)
-  const lightX = focusMode 
+  const lightX = focusMode
     ? 50 + Math.sin(time * 0.1) * 10 // Gentle automatic drift in focus mode
     : 50 + (mousePos.x / window.innerWidth - 0.5) * 20;
-
-  // Debug reset
-  const handleReset = () => {
-    localStorage.removeItem('chaos-playground-data');
-    window.location.reload();
-  };
 
   return (
     <div className={`aquarium-room ${isLateNight ? 'late-night' : ''} ${focusMode ? 'focus-mode' : ''}`}>
@@ -450,50 +437,13 @@ export default function Aquarium({ focusMode = false }: AquariumProps) {
         {statusMessage}
       </div>
 
-      {/* Debug Panel */}
-      <div className="debug-panel">
-        <div className="debug-title">Debug Controls</div>
-        
-        <div className="debug-row">
-          <span>Visits:</span>
-          <button 
-            className={debugVisits === 1 ? 'active' : ''} 
-            onClick={() => setDebugVisits(debugVisits === 1 ? null : 1)}
-          >1</button>
-          <button 
-            className={debugVisits === 3 ? 'active' : ''} 
-            onClick={() => setDebugVisits(debugVisits === 3 ? null : 3)}
-          >3</button>
-          <button 
-            className={debugVisits === 5 ? 'active' : ''} 
-            onClick={() => setDebugVisits(debugVisits === 5 ? null : 5)}
-          >5</button>
-          <button 
-            className={debugVisits === 8 ? 'active' : ''} 
-            onClick={() => setDebugVisits(debugVisits === 8 ? null : 8)}
-          >8</button>
-          <button 
-            className={debugVisits === null ? 'active' : ''} 
-            onClick={() => setDebugVisits(null)}
-          >REAL</button>
-        </div>
-
-        <div className="debug-row">
-          <span>Late Night:</span>
-          <button 
-            className={debugLateNight === true ? 'active' : ''} 
-            onClick={() => setDebugLateNight(debugLateNight === true ? null : true)}
-          >ON</button>
-          <button 
-            className={debugLateNight === false ? 'active' : ''} 
-            onClick={() => setDebugLateNight(debugLateNight === false ? null : false)}
-          >OFF</button>
-          <button 
-            className={debugLateNight === null ? 'active' : ''} 
-            onClick={() => setDebugLateNight(null)}
-          >AUTO</button>
-        </div>
-      </div>
+      <DebugPanel
+        debugValue={debugVisits}
+        onDebugValueChange={setDebugVisits}
+        debugLateNight={debugLateNight}
+        onDebugLateNightChange={setDebugLateNight}
+        visitButtons={[1, 3, 5, 8]}
+      />
 
       <button onClick={handleReset} className="debug-reset">Reset All Data</button>
     </div>

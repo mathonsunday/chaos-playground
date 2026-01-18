@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { usePersonalizationContext, roomDisplayNames } from '../../context/PersonalizationContext';
-import { useWaveEvolution } from '../../hooks/useWaveEvolution';
+import { useDebugOverrides } from '../../hooks/useDebugOverrides';
+import { useResetData } from '../../hooks/useResetData';
+import { DebugPanel } from '../../components/DebugPanel';
 import './Portrait.css';
 
 interface PortraitProps {
@@ -10,31 +12,25 @@ interface PortraitProps {
 export default function Portrait({ focusMode = false }: PortraitProps) {
   const { data, getTimeOfDay, getFavoriteRoom } = usePersonalizationContext();
   const visits = data.roomVisits['portrait'] || 0;
-  
-  // Wave evolution for focus mode
-  const waveEvolution = useWaveEvolution({
-    min: 1,
-    max: 10,
-    cycleDuration: 45 * 60 * 1000,
-    enabled: focusMode,
+
+  const { effectiveValue: effectiveVisits, debugOverride: debugVisits, setDebugOverride: setDebugVisits, debugLateNight, setDebugLateNight } = useDebugOverrides({
+    focusMode,
+    actualValue: visits,
+    waveEvolutionConfig: {
+      min: 1,
+      max: 10,
+      cycleDuration: 45 * 60 * 1000,
+    },
   });
-  
+
   const [mousePos, setMousePos] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const [time, setTime] = useState(0);
   const [flicker, setFlicker] = useState(1);
   const [armReach, setArmReach] = useState(0);
-  
-  // Debug overrides (only used when not in focus mode)
-  const [debugVisits, setDebugVisits] = useState<number | null>(null);
-  const [debugLateNight, setDebugLateNight] = useState<boolean | null>(null);
-  
-  const animationRef = useRef<number>(0);
 
-  // Effective values - use wave evolution in focus mode
-  const effectiveVisits = useMemo(() => {
-    if (focusMode) return waveEvolution.intValue;
-    return debugVisits !== null ? debugVisits : visits;
-  }, [focusMode, waveEvolution.intValue, debugVisits, visits]);
+  const animationRef = useRef<number>(0);
+  const handleReset = useResetData();
+
   const isLateNight = debugLateNight !== null ? debugLateNight : getTimeOfDay() === 'late';
   const favorite = getFavoriteRoom();
 
@@ -116,11 +112,6 @@ export default function Portrait({ focusMode = false }: PortraitProps) {
   const sway = Math.sin(time * 0.5) * 2;
 
   const armAngle = Math.atan2(mousePos.y - figureY, mousePos.x - centerX);
-
-  const handleReset = () => {
-    localStorage.removeItem('chaos-playground-data');
-    window.location.reload();
-  };
 
   return (
     <div className={`portrait-room ${isLateNight ? 'late-night' : ''} ${focusMode ? 'focus-mode' : ''}`}>
@@ -254,26 +245,12 @@ export default function Portrait({ focusMode = false }: PortraitProps) {
         {favoriteHint && <span className="favorite-hint">{favoriteHint}</span>}
       </div>
 
-      {/* Debug Panel */}
-      <div className="debug-panel">
-        <div className="debug-title">Debug Controls</div>
-        
-        <div className="debug-row">
-          <span>Visits:</span>
-          <button className={debugVisits === 1 ? 'active' : ''} onClick={() => setDebugVisits(debugVisits === 1 ? null : 1)}>1</button>
-          <button className={debugVisits === 3 ? 'active' : ''} onClick={() => setDebugVisits(debugVisits === 3 ? null : 3)}>3</button>
-          <button className={debugVisits === 6 ? 'active' : ''} onClick={() => setDebugVisits(debugVisits === 6 ? null : 6)}>6</button>
-          <button className={debugVisits === 10 ? 'active' : ''} onClick={() => setDebugVisits(debugVisits === 10 ? null : 10)}>10</button>
-          <button className={debugVisits === null ? 'active' : ''} onClick={() => setDebugVisits(null)}>REAL</button>
-        </div>
-
-        <div className="debug-row">
-          <span>Late Night:</span>
-          <button className={debugLateNight === true ? 'active' : ''} onClick={() => setDebugLateNight(debugLateNight === true ? null : true)}>ON</button>
-          <button className={debugLateNight === false ? 'active' : ''} onClick={() => setDebugLateNight(debugLateNight === false ? null : false)}>OFF</button>
-          <button className={debugLateNight === null ? 'active' : ''} onClick={() => setDebugLateNight(null)}>AUTO</button>
-        </div>
-      </div>
+      <DebugPanel
+        debugValue={debugVisits}
+        onDebugValueChange={setDebugVisits}
+        debugLateNight={debugLateNight}
+        onDebugLateNightChange={setDebugLateNight}
+      />
 
       <button onClick={handleReset} className="debug-reset">Reset All Data</button>
     </div>

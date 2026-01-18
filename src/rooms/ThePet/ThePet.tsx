@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { usePersonalizationContext } from '../../context/PersonalizationContext';
-import { useWaveEvolution } from '../../hooks/useWaveEvolution';
+import { useDebugOverrides } from '../../hooks/useDebugOverrides';
+import { useResetData } from '../../hooks/useResetData';
+import { DebugPanel } from '../../components/DebugPanel';
 import './ThePet.css';
 
 interface ThePetProps {
@@ -10,27 +12,24 @@ interface ThePetProps {
 export default function ThePet({ focusMode = false }: ThePetProps) {
   const { data } = usePersonalizationContext();
   const petVisits = data.roomVisits['pet'] || 0;
-  
-  // Wave evolution for focus mode
-  const waveEvolution = useWaveEvolution({
-    min: 1,
-    max: 5,
-    cycleDuration: 45 * 60 * 1000,
-    enabled: focusMode,
+
+  const { effectiveValue: effectiveVisits, debugOverride: debugVisits, setDebugOverride: setDebugVisits } = useDebugOverrides({
+    focusMode,
+    actualValue: petVisits,
+    waveEvolutionConfig: {
+      min: 1,
+      max: 5,
+      cycleDuration: 45 * 60 * 1000,
+    },
   });
-  
+
   const [mousePos, setMousePos] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const [time, setTime] = useState(0);
   const [blink, setBlink] = useState(false);
   const [showHearts, setShowHearts] = useState(false);
   const animationRef = useRef<number>(0);
-  
-  // Debug override (only used when not in focus mode)
-  const [debugVisits, setDebugVisits] = useState<number | null>(null);
-  const effectiveVisits = useMemo(() => {
-    if (focusMode) return waveEvolution.intValue;
-    return debugVisits !== null ? debugVisits : petVisits;
-  }, [focusMode, waveEvolution.intValue, debugVisits, petVisits]);
+
+  const handleReset = useResetData();
 
   // Familiarity level based on visits (DEBUG: compressed scale for testing)
   const familiarity = useMemo(() => {
@@ -63,11 +62,6 @@ export default function ThePet({ focusMode = false }: ThePetProps) {
     }
   }, [familiarity]);
 
-  // Debug: reset all data
-  const handleReset = () => {
-    localStorage.removeItem('chaos-playground-data');
-    window.location.reload();
-  };
 
   // Show hearts on bonded entrance
   useEffect(() => {
@@ -151,24 +145,13 @@ export default function ThePet({ focusMode = false }: ThePetProps) {
           <span className="visit-count">(visit {petVisits})</span>
         </div>
         
-        {/* Debug Panel */}
-        <div className="debug-panel">
-          <div className="debug-title">Debug Controls</div>
-          <div className="debug-row">
-            <span>Visits:</span>
-            {[1, 2, 3, 4, 5].map(v => (
-              <button 
-                key={v}
-                className={debugVisits === v ? 'active' : ''} 
-                onClick={() => setDebugVisits(debugVisits === v ? null : v)}
-              >{v === 5 ? '5+' : v}</button>
-            ))}
-            <button 
-              className={debugVisits === null ? 'active' : ''} 
-              onClick={() => setDebugVisits(null)}
-            >REAL</button>
-          </div>
-        </div>
+        <DebugPanel
+          debugValue={debugVisits}
+          onDebugValueChange={setDebugVisits}
+          debugLateNight={null}
+          onDebugLateNightChange={() => {}}
+          visitButtons={[1, 2, 3, 4, 5]}
+        />
         <button onClick={handleReset} className="debug-reset">Reset Data</button>
       </div>
     );
@@ -249,24 +232,13 @@ export default function ThePet({ focusMode = false }: ThePetProps) {
           <span className="visit-count">(visit {petVisits})</span>
         </div>
         
-        {/* Debug Panel */}
-        <div className="debug-panel">
-          <div className="debug-title">Debug Controls</div>
-          <div className="debug-row">
-            <span>Visits:</span>
-            {[1, 2, 3, 4, 5].map(v => (
-              <button 
-                key={v}
-                className={debugVisits === v ? 'active' : ''} 
-                onClick={() => setDebugVisits(debugVisits === v ? null : v)}
-              >{v === 5 ? '5+' : v}</button>
-            ))}
-            <button 
-              className={debugVisits === null ? 'active' : ''} 
-              onClick={() => setDebugVisits(null)}
-            >REAL</button>
-          </div>
-        </div>
+        <DebugPanel
+          debugValue={debugVisits}
+          onDebugValueChange={setDebugVisits}
+          debugLateNight={null}
+          onDebugLateNightChange={() => {}}
+          visitButtons={[1, 2, 3, 4, 5]}
+        />
         <button onClick={handleReset} className="debug-reset">Reset Data</button>
       </div>
     );
@@ -349,24 +321,13 @@ export default function ThePet({ focusMode = false }: ThePetProps) {
           <span className="visit-count">(visit {petVisits})</span>
         </div>
         
-        {/* Debug Panel */}
-        <div className="debug-panel">
-          <div className="debug-title">Debug Controls</div>
-          <div className="debug-row">
-            <span>Visits:</span>
-            {[1, 2, 3, 4, 5].map(v => (
-              <button 
-                key={v}
-                className={debugVisits === v ? 'active' : ''} 
-                onClick={() => setDebugVisits(debugVisits === v ? null : v)}
-              >{v === 5 ? '5+' : v}</button>
-            ))}
-            <button 
-              className={debugVisits === null ? 'active' : ''} 
-              onClick={() => setDebugVisits(null)}
-            >REAL</button>
-          </div>
-        </div>
+        <DebugPanel
+          debugValue={debugVisits}
+          onDebugValueChange={setDebugVisits}
+          debugLateNight={null}
+          onDebugLateNightChange={() => {}}
+          visitButtons={[1, 2, 3, 4, 5]}
+        />
         <button onClick={handleReset} className="debug-reset">Reset Data</button>
       </div>
     );
@@ -469,24 +430,13 @@ export default function ThePet({ focusMode = false }: ThePetProps) {
           <span className="visit-count">(visit {petVisits})</span>
         </div>
         
-        {/* Debug Panel */}
-        <div className="debug-panel">
-          <div className="debug-title">Debug Controls</div>
-          <div className="debug-row">
-            <span>Visits:</span>
-            {[1, 2, 3, 4, 5].map(v => (
-              <button 
-                key={v}
-                className={debugVisits === v ? 'active' : ''} 
-                onClick={() => setDebugVisits(debugVisits === v ? null : v)}
-              >{v === 5 ? '5+' : v}</button>
-            ))}
-            <button 
-              className={debugVisits === null ? 'active' : ''} 
-              onClick={() => setDebugVisits(null)}
-            >REAL</button>
-          </div>
-        </div>
+        <DebugPanel
+          debugValue={debugVisits}
+          onDebugValueChange={setDebugVisits}
+          debugLateNight={null}
+          onDebugLateNightChange={() => {}}
+          visitButtons={[1, 2, 3, 4, 5]}
+        />
         <button onClick={handleReset} className="debug-reset">Reset Data</button>
       </div>
     );

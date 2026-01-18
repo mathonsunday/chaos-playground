@@ -81,17 +81,6 @@ body {
   transform: scale(1.05);
 }
 
-.back-button-dark {
-  background: rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.2);
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.back-button-dark:hover {
-  background: rgba(0, 0, 0, 0.2);
-  color: rgba(0, 0, 0, 0.9);
-}
-
 /* Canvas fills container */
 canvas {
   display: block;
